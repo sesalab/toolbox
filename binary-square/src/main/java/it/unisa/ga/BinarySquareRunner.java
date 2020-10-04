@@ -14,7 +14,7 @@ import it.unisa.ga.operators.mutation.SinglePointMutation;
 import it.unisa.ga.operators.selection.RouletteWheelSelection;
 import it.unisa.ga.operators.selection.SelectionOperator;
 
-public class GARunner {
+public class BinarySquareRunner {
 
     public static void main(String[] args) throws CloneNotSupportedException {
         int numberOfIndividuals = 4;
@@ -35,5 +35,4 @@ public class GARunner {
 
         System.out.println("Best individual: " + bestIndividual.getCoding() + " with fitness " + bestIndividual.getFitness());
     }
-
 }

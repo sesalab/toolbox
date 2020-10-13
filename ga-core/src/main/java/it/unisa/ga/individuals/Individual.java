@@ -19,7 +19,7 @@ public abstract class Individual implements Comparable<Individual>, Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Individual clone() throws CloneNotSupportedException {
+        return (Individual) super.clone();
     }
 }

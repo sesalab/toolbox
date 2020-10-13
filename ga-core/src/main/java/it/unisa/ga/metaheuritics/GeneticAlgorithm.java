@@ -6,6 +6,7 @@ import it.unisa.ga.initializers.Initializer;
 import it.unisa.ga.operators.crossover.CrossoverOperator;
 import it.unisa.ga.operators.mutation.MutationOperator;
 import it.unisa.ga.operators.selection.SelectionOperator;
+import it.unisa.ga.results.Results;
 
 public abstract class GeneticAlgorithm<T extends Individual> {
 
@@ -25,7 +26,7 @@ public abstract class GeneticAlgorithm<T extends Individual> {
         this.mutationOperator = mutationOperator;
     }
 
-    public abstract T run() throws CloneNotSupportedException;
+    public abstract Results<T> run() throws CloneNotSupportedException;
 
     public FitnessFunction<T> getFitnessFunction() {
         return fitnessFunction;

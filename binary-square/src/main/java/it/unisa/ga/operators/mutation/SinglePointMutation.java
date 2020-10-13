@@ -17,7 +17,7 @@ public class SinglePointMutation extends MutationOperator<BinaryIndividual> {
         populationList.remove(chosenIndividual);
         populationList.add(mutatedIndividual);
 
-        Population<BinaryIndividual> newPopulation = new Population<>();
+        Population<BinaryIndividual> newPopulation = new Population<>(population.getId() + 1);
         newPopulation.addAll(populationList);
         return newPopulation;
     }

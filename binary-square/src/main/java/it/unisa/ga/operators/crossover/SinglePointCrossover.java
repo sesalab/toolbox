@@ -10,7 +10,7 @@ public class SinglePointCrossover extends CrossoverOperator<BinaryIndividual> {
 
     @Override
     public Population<BinaryIndividual> apply(Population<BinaryIndividual> population, Random rand) {
-        Population<BinaryIndividual> offsprings = new Population<>();
+        Population<BinaryIndividual> offsprings = new Population<>(population.getId() + 1);
 
         // Cross parents
         List<Pairing> pairings = makePairings(population);

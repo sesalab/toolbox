@@ -7,48 +7,54 @@ import it.unisa.ga.operators.crossover.CrossoverOperator;
 import it.unisa.ga.operators.mutation.MutationOperator;
 import it.unisa.ga.operators.selection.SelectionOperator;
 import it.unisa.ga.populations.Population;
+import it.unisa.ga.results.Results;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
 public class SimpleGeneticAlgorithm<T extends Individual> extends GeneticAlgorithm<T> {
 
-    // We decide to keep the history of all generations
-    private final Stack<Population<T>> generations;
     // We set probability of doing a mutation. If provided invalid, 0.1 is set.
     private final double mutationProbability;
-
     // One of the stopping condition is reaching the maximum number of allowed iterations (at least > 0)
     private final int maxIterations;
-    // Early stop if there are no improvements in X generations
-    private final int maxIterationsWithoutImprovements;
+    // Early stop if there are no improvements for more than X generations
+    private final int maxIterationsNoImprovements;
 
     public SimpleGeneticAlgorithm(FitnessFunction<T> fitnessFunction, Initializer<T> initializer,
                                   SelectionOperator<T> selectionOperator, CrossoverOperator<T> crossoverOperator,
                                   MutationOperator<T> mutationOperator, double mutationProbability,
-                                  int maxIterations, int maxIterationsWithoutImprovements) {
+                                  int maxIterations, int maxIterationsNoImprovements) {
         super(fitnessFunction, initializer, selectionOperator, crossoverOperator, mutationOperator);
-        this.generations = new Stack<>();
         if (0.0 <= mutationProbability && mutationProbability <= 1.0) {
             this.mutationProbability = mutationProbability;
         } else {
             this.mutationProbability = 0.1;
         }
         this.maxIterations = Math.max(maxIterations, 1);
-        this.maxIterationsWithoutImprovements = Math.max(maxIterationsWithoutImprovements, 0);
+        this.maxIterationsNoImprovements = Math.max(maxIterationsNoImprovements, 0);
     }
 
-    public T run() throws CloneNotSupportedException {
+    // Method with no side effects
+    public Results<T> run() throws CloneNotSupportedException {
         Random rand = new Random();
+        List<String> log = new ArrayList<>();
+        Stack<Population<T>> generations = new Stack<>();
+
         // Initialization of the first generation
         generations.push(getInitializator().initialize());
         Population<T> firstGeneration = generations.peek();
         getFitnessFunction().evaluate(firstGeneration);
+        log.add("Gen 1) " + firstGeneration.getAverageFitness() + " (CurrentAvg)");
         Population<T> bestGeneration = firstGeneration;
 
-        int iterations = 0;
-        int iterationsWithoutImprovements = 0;
+        int iterations = 1;
+        int iterationsNoImprovements = 0;
+        boolean maxNoImprovementsExceeded = false;
         do {
+            StringBuilder logEntry = new StringBuilder();
             Population<T> currentGeneration = generations.peek();
 
             // Selection
@@ -63,25 +69,38 @@ public class SimpleGeneticAlgorithm<T extends Individual> extends GeneticAlgorit
             getFitnessFunction().evaluate(newGeneration);
             generations.push(newGeneration);
             iterations++;
+            logEntry.append("Gen ").append(iterations).append(") ");
 
-            // Check if there are average improvements
+            // Check if there is an average improvement
             double bestAverageFitness = bestGeneration.getAverageFitness();
-            double newAverageFitness = newGeneration.getAverageFitness();
-            System.out.println("New: " + newAverageFitness + " vs Best: " + bestAverageFitness);
-            if (newAverageFitness > bestAverageFitness) {
+            double currentAverageFitness = newGeneration.getAverageFitness();
+            logEntry.append(currentAverageFitness).append(" vs ").append(bestAverageFitness).append(" (CurrentAvg vs BestAvg)");
+            if (currentAverageFitness > bestAverageFitness) {
                 bestGeneration = newGeneration;
-                iterationsWithoutImprovements = 0;
-                System.out.println("Improvement");
+                iterationsNoImprovements = 0;
+                logEntry.append(" ==> Improvement");
             } else {
-                iterationsWithoutImprovements++;
+                iterationsNoImprovements++;
                 // Check if there is a limit of no improvements and this limit is exceeded
-                if (0 < maxIterationsWithoutImprovements && maxIterationsWithoutImprovements <= iterationsWithoutImprovements) {
-                    System.out.println("Early Stop");
-                    break;
+                maxNoImprovementsExceeded = 0 < maxIterationsNoImprovements && maxIterationsNoImprovements < iterationsNoImprovements;
+                if (maxNoImprovementsExceeded) {
+                    logEntry.append(" ==> Early Stop");
                 }
             }
-        } while (iterations < maxIterations);
-        // TODO Return a Result object that contain everything for a good report: generation stack, best generation, etc.
-        return bestGeneration.getBestIndividual();
+            log.add(logEntry.toString());
+        } while (iterations < maxIterations && !maxNoImprovementsExceeded);
+        return new Results<>(this, generations, bestGeneration, log);
+    }
+
+    public double getMutationProbability() {
+        return mutationProbability;
+    }
+
+    public int getMaxIterations() {
+        return maxIterations;
+    }
+
+    public int getMaxIterationsNoImprovements() {
+        return maxIterationsNoImprovements;
     }
 }

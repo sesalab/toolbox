@@ -43,7 +43,7 @@ public class RouletteWheelSelection<T extends Individual> extends SelectionOpera
         }
 
         // Spinning time!
-        Population<T> newPopulation = new Population<>();
+        Population<T> newPopulation = new Population<>(population.getId() + 1);
         for (int i = 0; i < rouletteWheel.size(); i++) {
             double pointer = rand.nextDouble();
             for (WheelElement element : rouletteWheel) {

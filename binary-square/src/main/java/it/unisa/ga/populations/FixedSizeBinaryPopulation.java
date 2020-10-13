@@ -6,8 +6,13 @@ public class FixedSizeBinaryPopulation extends Population<BinaryIndividual> {
 
     private final int maxSize;
 
-    public FixedSizeBinaryPopulation(int maxSize) {
+    public FixedSizeBinaryPopulation(long id, int maxSize) {
+        super(id);
         this.maxSize = Math.max(maxSize, 0);
+    }
+
+    public int getMaxSize() {
+        return maxSize;
     }
 
     @Override

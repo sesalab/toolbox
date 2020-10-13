@@ -17,7 +17,7 @@ public class FixedSizeBinaryRandomInitializer extends Initializer<BinaryIndividu
 
     @Override
     public Population<BinaryIndividual> initialize() {
-        FixedSizeBinaryPopulation population = new FixedSizeBinaryPopulation(numberOfIndividuals);
+        FixedSizeBinaryPopulation population = new FixedSizeBinaryPopulation(0, numberOfIndividuals);
         for (int i = 0; i < numberOfIndividuals; i++) {
             String randomCoding = generateRandomBinaryString();
             BinaryIndividual individual = new BinaryIndividual(randomCoding);

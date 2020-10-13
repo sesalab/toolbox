@@ -1,19 +1,14 @@
 package it.unisa.ga.individuals;
 
-public class BinaryIndividual extends Individual {
-
-    private final String coding;
+public class BinaryIndividual extends StringIndividual<Integer> {
 
     public BinaryIndividual(String coding) {
-        this.coding = coding;
+        super(coding);
     }
 
-    public String getCoding() {
-        return coding;
-    }
-
-    public int decode() {
-        return Integer.parseUnsignedInt(coding, 2);
+    @Override
+    public Integer decode() {
+        return Integer.parseUnsignedInt(getCoding(), 2);
     }
 
 }

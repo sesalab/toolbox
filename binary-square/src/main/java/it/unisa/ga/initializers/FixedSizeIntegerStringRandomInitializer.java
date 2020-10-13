@@ -1,26 +1,26 @@
 package it.unisa.ga.initializers;
 
-import it.unisa.ga.individuals.BinaryIndividual;
-import it.unisa.ga.populations.FixedSizeBinaryPopulation;
+import it.unisa.ga.individuals.IntegerStringIndividual;
+import it.unisa.ga.populations.FixedSizePopulation;
 import it.unisa.ga.populations.Population;
 
-public class FixedSizeBinaryRandomInitializer extends Initializer<BinaryIndividual> {
+public class FixedSizeIntegerStringRandomInitializer extends Initializer<IntegerStringIndividual> {
 
     private final int numberOfIndividuals;
     private final int sizeOfIndividuals;
 
     // The given integer will be set as the maximum size of the initialized population
-    public FixedSizeBinaryRandomInitializer(int numberOfIndividuals, int sizeOfIndividuals) {
+    public FixedSizeIntegerStringRandomInitializer(int numberOfIndividuals, int sizeOfIndividuals) {
         this.numberOfIndividuals = Math.max(numberOfIndividuals, 1);
         this.sizeOfIndividuals = Math.max(sizeOfIndividuals, 1);
     }
 
     @Override
-    public Population<BinaryIndividual> initialize() {
-        FixedSizeBinaryPopulation population = new FixedSizeBinaryPopulation(0, numberOfIndividuals);
+    public Population<IntegerStringIndividual> initialize() {
+        FixedSizePopulation<IntegerStringIndividual> population = new FixedSizePopulation<>(0, numberOfIndividuals);
         for (int i = 0; i < numberOfIndividuals; i++) {
             String randomCoding = generateRandomBinaryString();
-            BinaryIndividual individual = new BinaryIndividual(randomCoding);
+            IntegerStringIndividual individual = new IntegerStringIndividual(randomCoding);
             population.add(individual);
         }
         return population;

@@ -1,7 +1,7 @@
 package it.unisa.ga.fitness;
 
-import it.unisa.ga.populations.Population;
 import it.unisa.ga.individuals.Individual;
+import it.unisa.ga.populations.Population;
 
 import java.util.Collections;
 
@@ -28,7 +28,7 @@ public abstract class FitnessFunction<T extends Individual> {
         population.setBestIndividual(bestIndividual);
     }
 
-    protected abstract void evaluate(T individual);
+    public abstract void evaluate(T individual);
 
     public boolean isMaximum() {
         return isMaximum;

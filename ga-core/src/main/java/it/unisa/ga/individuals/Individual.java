@@ -2,7 +2,7 @@ package it.unisa.ga.individuals;
 
 public abstract class Individual implements Comparable<Individual>, Cloneable {
 
-    private double fitness;
+    protected double fitness;
 
     public double getFitness() {
         return fitness;
@@ -21,5 +21,12 @@ public abstract class Individual implements Comparable<Individual>, Cloneable {
     @Override
     public Individual clone() throws CloneNotSupportedException {
         return (Individual) super.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "Individual{" +
+                "fitness=" + fitness +
+                '}';
     }
 }

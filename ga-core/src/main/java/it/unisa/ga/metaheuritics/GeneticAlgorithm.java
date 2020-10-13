@@ -32,7 +32,7 @@ public abstract class GeneticAlgorithm<T extends Individual> {
         return fitnessFunction;
     }
 
-    public Initializer<T> getInitializator() {
+    public Initializer<T> getInitializer() {
         return initializer;
     }
 

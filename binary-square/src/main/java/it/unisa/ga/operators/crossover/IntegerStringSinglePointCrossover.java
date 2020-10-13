@@ -1,19 +1,21 @@
 package it.unisa.ga.operators.crossover;
 
-import it.unisa.ga.individuals.BinaryIndividual;
+import it.unisa.ga.individuals.IntegerStringIndividual;
 import it.unisa.ga.populations.Population;
 
 import java.util.List;
 import java.util.Random;
 
-public class SinglePointCrossover extends CrossoverOperator<BinaryIndividual> {
+public class IntegerStringSinglePointCrossover extends CrossoverOperator<IntegerStringIndividual> {
 
     @Override
-    public Population<BinaryIndividual> apply(Population<BinaryIndividual> population, Random rand) {
-        Population<BinaryIndividual> offsprings = new Population<>(population.getId() + 1);
+    public Population<IntegerStringIndividual> apply(Population<IntegerStringIndividual> population, Random rand) throws CloneNotSupportedException {
+        Population<IntegerStringIndividual> offsprings = population.clone();
+        offsprings.setId(population.getId() + 1);
+        offsprings.clear();
 
         // Cross parents
-        List<Pairing> pairings = makePairings(population);
+        List<Pairing> pairings = makeRandomPairings(population);
         for (Pairing pairing : pairings) {
             String firstCoding = pairing.firstParent.getCoding();
             String secondCoding = pairing.secondParent.getCoding();
@@ -25,8 +27,10 @@ public class SinglePointCrossover extends CrossoverOperator<BinaryIndividual> {
             String secondCodingLeft = secondCoding.substring(0, cutPoint);
             String secondCodingRight = secondCoding.substring(cutPoint);
 
-            BinaryIndividual offspring1 = new BinaryIndividual(firstCodingLeft + secondCodingRight);
-            BinaryIndividual offspring2 = new BinaryIndividual(secondCodingLeft + firstCodingRight);
+            IntegerStringIndividual offspring1 = (IntegerStringIndividual) pairing.firstParent.clone();
+            offspring1.setCoding(firstCodingLeft + secondCodingRight);
+            IntegerStringIndividual offspring2 = (IntegerStringIndividual) pairing.secondParent.clone();
+            offspring2.setCoding(secondCodingLeft + firstCodingRight);
             offsprings.add(offspring1);
             offsprings.add(offspring2);
         }

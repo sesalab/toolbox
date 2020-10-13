@@ -44,7 +44,7 @@ public class SimpleGeneticAlgorithm<T extends Individual> extends GeneticAlgorit
         Stack<Population<T>> generations = new Stack<>();
 
         // Initialization of the first generation
-        generations.push(getInitializator().initialize());
+        generations.push(getInitializer().initialize());
         Population<T> firstGeneration = generations.peek();
         getFitnessFunction().evaluate(firstGeneration);
         log.add("Gen 1) " + firstGeneration.getAverageFitness() + " (CurrentAvg)");
@@ -73,9 +73,11 @@ public class SimpleGeneticAlgorithm<T extends Individual> extends GeneticAlgorit
 
             // Check if there is an average improvement
             double bestAverageFitness = bestGeneration.getAverageFitness();
-            double currentAverageFitness = newGeneration.getAverageFitness();
-            logEntry.append(currentAverageFitness).append(" vs ").append(bestAverageFitness).append(" (CurrentAvg vs BestAvg)");
-            if (currentAverageFitness > bestAverageFitness) {
+            double newAverageFitness = newGeneration.getAverageFitness();
+            logEntry.append(newAverageFitness).append(" vs ").append(bestAverageFitness).append(" (NewAvg vs BestAvg)");
+
+            if (getFitnessFunction().isMaximum() && newGeneration.compareTo(bestGeneration) > 0 ||
+                    !getFitnessFunction().isMaximum() && newGeneration.compareTo(bestGeneration) < 0) {
                 bestGeneration = newGeneration;
                 iterationsNoImprovements = 0;
                 logEntry.append(" ==> Improvement");

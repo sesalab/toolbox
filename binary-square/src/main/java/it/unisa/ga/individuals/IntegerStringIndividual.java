@@ -1,8 +1,8 @@
 package it.unisa.ga.individuals;
 
-public class BinaryIndividual extends StringIndividual<Integer> {
+public class IntegerStringIndividual extends StringIndividual<Integer> {
 
-    public BinaryIndividual(String coding) {
+    public IntegerStringIndividual(String coding) {
         super(coding);
     }
 

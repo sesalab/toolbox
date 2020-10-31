@@ -4,7 +4,7 @@ import it.unisa.ga.individuals.ChessboardIndividual;
 
 import java.util.Random;
 
-public class ChessboardSinglePointMutation extends SinglePointMutation<ChessboardIndividual> {
+public class ChessboardSinglePointMutation extends RandomResettingMutation<ChessboardIndividual> {
     
     @Override
     protected ChessboardIndividual mutate(ChessboardIndividual individual, Random rand) throws CloneNotSupportedException {

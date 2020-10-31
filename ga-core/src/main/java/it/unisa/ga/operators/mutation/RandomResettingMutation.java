@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class SinglePointMutation<T extends Individual> extends MutationOperator<T> {
+public abstract class RandomResettingMutation<T extends Individual> extends MutationOperator<T> {
 
     @Override
     public Population<T> apply(Population<T> population, Random rand) throws CloneNotSupportedException {

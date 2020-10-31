@@ -1,7 +1,7 @@
 package it.unisa.ga.results;
 
 import it.unisa.ga.individuals.Individual;
-import it.unisa.ga.metaheuritics.GeneticAlgorithm;
+import it.unisa.ga.metaheuristics.GeneticAlgorithm;
 import it.unisa.ga.populations.Population;
 
 import java.util.List;

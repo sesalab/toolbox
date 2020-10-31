@@ -4,7 +4,7 @@ import it.unisa.ga.fitness.SquareFunction;
 import it.unisa.ga.individuals.IntegerStringIndividual;
 import it.unisa.ga.initializers.FixedSizeIntegerStringRandomInitializer;
 import it.unisa.ga.initializers.Initializer;
-import it.unisa.ga.metaheuritics.SimpleGeneticAlgorithm;
+import it.unisa.ga.metaheuristics.SimpleGeneticAlgorithm;
 import it.unisa.ga.operators.crossover.IntegerStringSinglePointCrossover;
 import it.unisa.ga.operators.mutation.IntegerStringSinglePointMutation;
 import it.unisa.ga.operators.selection.RouletteWheelSelection;

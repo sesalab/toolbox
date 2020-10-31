@@ -3,7 +3,7 @@ package it.unisa.ga;
 import it.unisa.ga.fitness.ConflictsFunction;
 import it.unisa.ga.individuals.ChessboardIndividual;
 import it.unisa.ga.initializers.FixedSizeChessboardRandomInitializer;
-import it.unisa.ga.metaheuritics.SimpleGeneticAlgorithm;
+import it.unisa.ga.metaheuristics.SimpleGeneticAlgorithm;
 import it.unisa.ga.operators.crossover.ChessboardSinglePointCrossover;
 import it.unisa.ga.operators.mutation.ChessboardSinglePointMutation;
 import it.unisa.ga.operators.selection.RouletteWheelSelection;

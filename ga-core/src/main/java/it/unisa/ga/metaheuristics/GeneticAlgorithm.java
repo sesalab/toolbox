@@ -1,4 +1,4 @@
-package it.unisa.ga.metaheuritics;
+package it.unisa.ga.metaheuristics;
 
 import it.unisa.ga.fitness.FitnessFunction;
 import it.unisa.ga.individuals.Individual;

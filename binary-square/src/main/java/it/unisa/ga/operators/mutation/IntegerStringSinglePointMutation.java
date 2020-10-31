@@ -4,7 +4,7 @@ import it.unisa.ga.individuals.IntegerStringIndividual;
 
 import java.util.Random;
 
-public class IntegerStringSinglePointMutation extends SinglePointMutation<IntegerStringIndividual> {
+public class IntegerStringSinglePointMutation extends RandomResettingMutation<IntegerStringIndividual> {
 
     @Override
     protected IntegerStringIndividual mutate(IntegerStringIndividual individual, Random rand) throws CloneNotSupportedException {

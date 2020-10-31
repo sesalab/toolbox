@@ -10,7 +10,7 @@ This Maven project consists in three modules:
 1. Open Intellij Idea
 2. Make sure you have `Git`, `GitHub` and `Maven Helper` IntelliJ plugins installed
 3. "File>New>Project from Version Control..."
-4. Paste `https://github.com/emaiannone/ga-examples`
+4. Paste `https://github.com/SeSa-Lab/ga-examples`
 5. Click "Clone"
 6. Wait for Maven plugin build
 7. Enjoy!
@@ -19,7 +19,7 @@ This Maven project consists in three modules:
 
 1. Make sure you have `git` installed on your local machine
 2. Open a terminal instance
-3. `git clone https://github.com/emaiannone/ga-examples`
+3. `git clone https://github.com/SeSa-Lab/ga-examples`
 4. Open the IDE you like
 5. Open `ga-examples` project
 6. Let the IDE do the build (assuming the IDE handles the `git`-managed projects)

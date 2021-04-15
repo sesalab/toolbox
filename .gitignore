@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+**/target
 
 # Log file
 *.log
@@ -25,3 +26,6 @@ hs_err_pid*
 # IntelliJ
 *.iml
 .idea/
+
+# DS Store
+.DS_Store

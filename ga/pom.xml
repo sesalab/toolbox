@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.unisa</groupId>
-    <artifactId>ga-examples</artifactId>
+    <artifactId>ga</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>ga-core</module>
+        <module>core</module>
         <module>binary-square</module>
         <module>eight-queens</module>
     </modules>

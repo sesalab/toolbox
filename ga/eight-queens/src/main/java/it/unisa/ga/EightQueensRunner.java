@@ -1,12 +1,12 @@
 package it.unisa.ga;
 
 import it.unisa.ga.fitness.ConflictsFunction;
-import it.unisa.ga.individuals.ChessboardIndividual;
-import it.unisa.ga.initializers.FixedSizeChessboardRandomInitializer;
-import it.unisa.ga.metaheuristics.SimpleGeneticAlgorithm;
-import it.unisa.ga.operators.crossover.ChessboardSinglePointCrossover;
-import it.unisa.ga.operators.mutation.ChessboardSinglePointMutation;
-import it.unisa.ga.operators.selection.RouletteWheelSelection;
+import it.unisa.ga.individual.ChessboardIndividual;
+import it.unisa.ga.initializer.FixedSizeChessboardRandomInitializer;
+import it.unisa.ga.metaheuristic.SimpleGeneticAlgorithm;
+import it.unisa.ga.operator.crossover.ChessboardSinglePointCrossover;
+import it.unisa.ga.operator.mutation.ChessboardSinglePointMutation;
+import it.unisa.ga.operator.selection.RouletteWheelSelection;
 import it.unisa.ga.results.Results;
 
 import java.util.Arrays;

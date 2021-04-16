@@ -1,6 +1,6 @@
 package it.unisa.ga.fitness;
 
-import it.unisa.ga.individuals.ChessboardIndividual;
+import it.unisa.ga.individual.ChessboardIndividual;
 
 public class ConflictsFunction extends FitnessFunction<ChessboardIndividual> {
 

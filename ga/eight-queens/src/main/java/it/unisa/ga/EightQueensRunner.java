@@ -2,12 +2,12 @@ package it.unisa.ga;
 
 import it.unisa.ga.fitness.ConflictsFunction;
 import it.unisa.ga.individual.ChessboardIndividual;
-import it.unisa.ga.initializer.FixedSizeChessboardRandomInitializer;
+import it.unisa.ga.population.initializer.FixedSizeChessboardRandomInitializer;
 import it.unisa.ga.metaheuristic.SGA;
 import it.unisa.ga.operator.crossover.ChessboardSinglePointCrossover;
 import it.unisa.ga.operator.mutation.ChessboardSinglePointMutation;
 import it.unisa.ga.operator.selection.RouletteWheelSelection;
-import it.unisa.ga.results.Results;
+import it.unisa.ga.results.GAResults;
 
 import java.util.Arrays;
 
@@ -28,10 +28,10 @@ public class EightQueensRunner {
 
         SGA<ChessboardIndividual> geneticAlgorithm = new SGA<>(fitnessFunction, initializer,
                 selectionOperator, crossoverOperator, mutationOperator, mutationProbability, maxIterations, maxIterationsNoImprovements);
-        Results<ChessboardIndividual> results = geneticAlgorithm.run();
-        ChessboardIndividual bestIndividual = results.getBestIndividual();
-        results.getLog().forEach(System.out::println);
-        System.out.printf("Search terminated in %d/%d iterations.%n", results.getNumberOfIterations(), geneticAlgorithm.getMaxIterations());
+        GAResults<ChessboardIndividual> GAResults = geneticAlgorithm.run();
+        ChessboardIndividual bestIndividual = GAResults.getBestIndividual();
+        GAResults.getLog().forEach(System.out::println);
+        System.out.printf("Search terminated in %d/%d iterations.%n", GAResults.getNumberOfIterations(), geneticAlgorithm.getMaxIterations());
         System.out.printf("Best individual is %s, with fitness %.2f.%n", Arrays.toString(bestIndividual.getCoding()), bestIndividual.getFitness());
     }
 

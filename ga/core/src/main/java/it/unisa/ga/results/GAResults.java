@@ -7,13 +7,13 @@ import it.unisa.ga.population.Population;
 import java.util.List;
 import java.util.Stack;
 
-public class Results<T extends Individual> {
+public class GAResults<T extends Individual> {
     private final GeneticAlgorithm<T> geneticAlgorithm;
     private final Stack<Population<T>> generations;
     private final Population<T> bestGeneration;
     private final List<String> log;
 
-    public Results(GeneticAlgorithm<T> geneticAlgorithm, Stack<Population<T>> generations, Population<T> bestGeneration, List<String> log) {
+    public GAResults(GeneticAlgorithm<T> geneticAlgorithm, Stack<Population<T>> generations, Population<T> bestGeneration, List<String> log) {
         this.geneticAlgorithm = geneticAlgorithm;
         this.generations = generations;
         this.bestGeneration = bestGeneration;

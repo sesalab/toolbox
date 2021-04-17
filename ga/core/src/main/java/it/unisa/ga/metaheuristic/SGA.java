@@ -1,13 +1,9 @@
 package it.unisa.ga.metaheuristic;
 
-import it.unisa.ga.fitness.FitnessFunction;
 import it.unisa.ga.individual.Individual;
-import it.unisa.ga.initializer.PopulationInitializer;
-import it.unisa.ga.operator.crossover.CrossoverOperator;
-import it.unisa.ga.operator.mutation.MutationOperator;
-import it.unisa.ga.operator.selection.SelectionOperator;
 import it.unisa.ga.population.Population;
-import it.unisa.ga.results.Results;
+import it.unisa.ga.results.GAResults;
+import it.unisa.ga.setting.GASetting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +18,9 @@ public class SGA<T extends Individual> extends GeneticAlgorithm<T> {
     // Early stop if there are no improvements for more than X generations
     private final int maxIterationsNoImprovements;
 
-    public SGA(FitnessFunction<T> fitnessFunction, PopulationInitializer<T> populationInitializer,
-               SelectionOperator<T> selectionOperator, CrossoverOperator<T> crossoverOperator,
-               MutationOperator<T> mutationOperator, double mutationProbability,
+    public SGA(GASetting<T> gaSetting, double mutationProbability,
                int maxIterations, int maxIterationsNoImprovements) {
-        super(fitnessFunction, populationInitializer, selectionOperator, crossoverOperator, mutationOperator);
+        super(gaSetting);
         if (0.0 <= mutationProbability && mutationProbability <= 1.0) {
             this.mutationProbability = mutationProbability;
         } else {
@@ -37,13 +31,13 @@ public class SGA<T extends Individual> extends GeneticAlgorithm<T> {
     }
 
     // Method with no side effects
-    public Results<T> run() throws CloneNotSupportedException {
+    public GAResults<T> run() throws CloneNotSupportedException {
         Random rand = new Random();
         List<String> log = new ArrayList<>();
         Stack<Population<T>> generations = new Stack<>();
 
         // Initialization of the first generation
-        generations.push(getInitializer().initialize());
+        generations.push(getPopulationInitializer().initialize());
         Population<T> firstGeneration = generations.peek();
         getFitnessFunction().evaluate(firstGeneration);
         log.add("Gen 1) " + firstGeneration.getAverageFitness() + " (CurrentAvg)");
@@ -90,7 +84,7 @@ public class SGA<T extends Individual> extends GeneticAlgorithm<T> {
             }
             log.add(logEntry.toString());
         } while (iterations < maxIterations && !maxNoImprovementsExceeded);
-        return new Results<>(this, generations, bestGeneration, log);
+        return new GAResults<>(this, generations, bestGeneration, log);
     }
 
     public double getMutationProbability() {

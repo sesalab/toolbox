@@ -1,13 +1,13 @@
 package it.unisa.ga.fitness;
 
-import it.unisa.ga.individual.SwitchSetting;
+import it.unisa.ga.individual.Switches;
 
-public class SquareFunction extends FitnessFunction<SwitchSetting> {
+public class SquareFunction extends FitnessFunction<Switches> {
     public SquareFunction() {
         super(true);
     }
 
-    public void evaluate(SwitchSetting individual) {
+    public void evaluate(Switches individual) {
         int value = individual.decode();
         individual.setFitness(value * value);
     }

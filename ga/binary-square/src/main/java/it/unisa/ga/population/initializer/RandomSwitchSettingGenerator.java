@@ -1,15 +1,15 @@
-package it.unisa.ga.initializer;
+package it.unisa.ga.population.initializer;
 
-import it.unisa.ga.individual.SwitchSetting;
+import it.unisa.ga.individual.Switches;
 
-public class RandomSwitchSettingGenerator extends IndividualGenerator<SwitchSetting> {
+public class RandomSwitchSettingGenerator extends IndividualGenerator<Switches> {
     private final int sizeOfIndividuals;
 
     public RandomSwitchSettingGenerator(int sizeOfIndividuals) {
         this.sizeOfIndividuals = sizeOfIndividuals;
     }
 
-    public SwitchSetting generateIndividual() {
+    public Switches generateIndividual() {
         StringBuilder randomString = new StringBuilder();
         for (int i = 0; i < sizeOfIndividuals; i++) {
             if (Math.random() < 0.5) {
@@ -18,6 +18,6 @@ public class RandomSwitchSettingGenerator extends IndividualGenerator<SwitchSett
                 randomString.append("1");
             }
         }
-        return new SwitchSetting(randomString.toString());
+        return new Switches(randomString.toString());
     }
 }

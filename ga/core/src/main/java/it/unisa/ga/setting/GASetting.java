@@ -1,19 +1,22 @@
 package it.unisa.ga.setting;
 
 import it.unisa.ga.fitness.FitnessFunction;
-import it.unisa.ga.initializer.PopulationInitializer;
+import it.unisa.ga.individual.Individual;
+import it.unisa.ga.population.initializer.PopulationInitializer;
 import it.unisa.ga.operator.crossover.CrossoverOperator;
 import it.unisa.ga.operator.mutation.MutationOperator;
 import it.unisa.ga.operator.selection.SelectionOperator;
 
-public class GASetting {
-    private final FitnessFunction<?> fitnessFunction;
-    private final PopulationInitializer<?> populationInitializer;
-    private final SelectionOperator<?> selectionOperator;
-    private final CrossoverOperator<?> crossoverOperator;
-    private final MutationOperator<?> mutationOperator;
+// TODO Add Stopping Condition
+public class GASetting<T extends Individual> {
+    private final FitnessFunction<T> fitnessFunction;
+    private final PopulationInitializer<T> populationInitializer;
+    private final SelectionOperator<T> selectionOperator;
+    private final CrossoverOperator<T> crossoverOperator;
+    private final MutationOperator<T> mutationOperator;
 
-    public GASetting(FitnessFunction<?> fitnessFunction, PopulationInitializer<?> populationInitializer, SelectionOperator<?> selectionOperator, CrossoverOperator<?> crossoverOperator, MutationOperator<?> mutationOperator) {
+    public GASetting(FitnessFunction<T> fitnessFunction, PopulationInitializer<T> populationInitializer, SelectionOperator<T> selectionOperator,
+                     CrossoverOperator<T> crossoverOperator, MutationOperator<T> mutationOperator) {
         this.fitnessFunction = fitnessFunction;
         this.populationInitializer = populationInitializer;
         this.selectionOperator = selectionOperator;
@@ -21,23 +24,23 @@ public class GASetting {
         this.mutationOperator = mutationOperator;
     }
 
-    public FitnessFunction<?> getFitnessFunction() {
+    public FitnessFunction<T> getFitnessFunction() {
         return fitnessFunction;
     }
 
-    public PopulationInitializer<?> getPopulationInitializer() {
+    public PopulationInitializer<T> getPopulationInitializer() {
         return populationInitializer;
     }
 
-    public SelectionOperator<?> getSelectionOperator() {
+    public SelectionOperator<T> getSelectionOperator() {
         return selectionOperator;
     }
 
-    public CrossoverOperator<?> getCrossoverOperator() {
+    public CrossoverOperator<T> getCrossoverOperator() {
         return crossoverOperator;
     }
 
-    public MutationOperator<?> getMutationOperator() {
+    public MutationOperator<T> getMutationOperator() {
         return mutationOperator;
     }
 }

@@ -1,12 +1,12 @@
 package it.unisa.ga.operator.mutation;
 
-import it.unisa.ga.individual.SwitchSetting;
+import it.unisa.ga.individual.Switches;
 
 import java.util.Random;
 
-public class SwitchSettingSinglePointMutation extends RandomResettingMutation<SwitchSetting> {
+public class SwitchSettingSinglePointMutation extends RandomResettingMutation<Switches> {
     @Override
-    protected SwitchSetting mutate(SwitchSetting individual, Random rand) throws CloneNotSupportedException {
+    protected Switches mutate(Switches individual, Random rand) throws CloneNotSupportedException {
         StringBuilder builder = new StringBuilder(individual.getCoding());
         int i = rand.nextInt(builder.length());
         if (builder.charAt(i) == '0') {
@@ -14,7 +14,7 @@ public class SwitchSettingSinglePointMutation extends RandomResettingMutation<Sw
         } else {
             builder.setCharAt(i, '0');
         }
-        SwitchSetting mutatedIndividual = (SwitchSetting) individual.clone();
+        Switches mutatedIndividual = (Switches) individual.clone();
         mutatedIndividual.setCoding(builder.toString());
         return mutatedIndividual;
     }

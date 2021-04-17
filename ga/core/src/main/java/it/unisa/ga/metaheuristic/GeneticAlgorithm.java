@@ -2,48 +2,43 @@ package it.unisa.ga.metaheuristic;
 
 import it.unisa.ga.fitness.FitnessFunction;
 import it.unisa.ga.individual.Individual;
-import it.unisa.ga.initializer.PopulationInitializer;
+import it.unisa.ga.population.initializer.PopulationInitializer;
 import it.unisa.ga.operator.crossover.CrossoverOperator;
 import it.unisa.ga.operator.mutation.MutationOperator;
 import it.unisa.ga.operator.selection.SelectionOperator;
-import it.unisa.ga.results.Results;
+import it.unisa.ga.results.GAResults;
+import it.unisa.ga.setting.GASetting;
 
 public abstract class GeneticAlgorithm<T extends Individual> {
-    private final FitnessFunction<T> fitnessFunction;
-    private final PopulationInitializer<T> populationInitializer;
-    private final SelectionOperator<T> selectionOperator;
-    private final CrossoverOperator<T> crossoverOperator;
-    private final MutationOperator<T> mutationOperator;
+    private final GASetting<T> gaSetting;
 
-    public GeneticAlgorithm(FitnessFunction<T> fitnessFunction, PopulationInitializer<T> populationInitializer,
-                            SelectionOperator<T> selectionOperator, CrossoverOperator<T> crossoverOperator,
-                            MutationOperator<T> mutationOperator) {
-        this.fitnessFunction = fitnessFunction;
-        this.populationInitializer = populationInitializer;
-        this.selectionOperator = selectionOperator;
-        this.crossoverOperator = crossoverOperator;
-        this.mutationOperator = mutationOperator;
+    public GeneticAlgorithm(GASetting<T> gaSetting) {
+        this.gaSetting = gaSetting;
     }
 
-    public abstract Results<T> run() throws CloneNotSupportedException;
+    public abstract GAResults<T> run() throws CloneNotSupportedException;
 
     public FitnessFunction<T> getFitnessFunction() {
-        return fitnessFunction;
+        return gaSetting.getFitnessFunction();
     }
 
-    public PopulationInitializer<T> getInitializer() {
-        return populationInitializer;
+    public PopulationInitializer<T> getPopulationInitializer() {
+        return gaSetting.getPopulationInitializer();
     }
 
     public SelectionOperator<T> getSelectionOperator() {
-        return selectionOperator;
+        return gaSetting.getSelectionOperator();
     }
 
     public CrossoverOperator<T> getCrossoverOperator() {
-        return crossoverOperator;
+        return gaSetting.getCrossoverOperator();
     }
 
     public MutationOperator<T> getMutationOperator() {
-        return mutationOperator;
+        return gaSetting.getMutationOperator();
+    }
+
+    public GASetting<T> getGaSetting() {
+        return gaSetting;
     }
 }

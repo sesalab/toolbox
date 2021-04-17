@@ -1,10 +1,10 @@
-package it.unisa.ga.initializer;
+package it.unisa.ga.population.initializer;
 
-import it.unisa.ga.individual.SwitchSetting;
+import it.unisa.ga.individual.Switches;
 import it.unisa.ga.population.UpperBoundedPopulation;
 import it.unisa.ga.population.Population;
 
-public class RandomUpperBoundedPopulationInitializer extends PopulationInitializer<SwitchSetting> {
+public class RandomUpperBoundedPopulationInitializer extends PopulationInitializer<Switches> {
     private final int numberOfIndividuals;
     private final RandomSwitchSettingGenerator randomSwitchSettingGenerator;
 
@@ -15,10 +15,10 @@ public class RandomUpperBoundedPopulationInitializer extends PopulationInitializ
     }
 
     @Override
-    public Population<SwitchSetting> initialize() {
-        UpperBoundedPopulation<SwitchSetting> population = new UpperBoundedPopulation<>(0, numberOfIndividuals);
+    public Population<Switches> initialize() {
+        UpperBoundedPopulation<Switches> population = new UpperBoundedPopulation<>(0, numberOfIndividuals);
         for (int i = 0; i < numberOfIndividuals; i++) {
-            SwitchSetting individual = randomSwitchSettingGenerator.generateIndividual();
+            Switches individual = randomSwitchSettingGenerator.generateIndividual();
             population.add(individual);
         }
         return population;

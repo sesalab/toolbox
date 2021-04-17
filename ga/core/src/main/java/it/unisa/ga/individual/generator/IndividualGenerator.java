@@ -1,4 +1,4 @@
-package it.unisa.ga.population.initializer;
+package it.unisa.ga.individual.generator;
 
 import it.unisa.ga.individual.Individual;
 

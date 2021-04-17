@@ -3,99 +3,62 @@ package it.unisa.ga.metaheuristic;
 import it.unisa.ga.individual.Individual;
 import it.unisa.ga.population.Population;
 import it.unisa.ga.results.GAResults;
-import it.unisa.ga.setting.GASetting;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Stack;
 
-public class SGA<T extends Individual> extends GeneticAlgorithm<T> {
+public class SGA<T extends Individual> extends GenerationalGA<T> {
     // We set probability of doing a mutation. If provided invalid, 0.1 is set.
     private final double mutationProbability;
-    // One of the stopping condition is reaching the maximum number of allowed iterations (at least > 0)
-    private final int maxIterations;
-    // Early stop if there are no improvements for more than X generations
-    private final int maxIterationsNoImprovements;
 
-    public SGA(GASetting<T> gaSetting, double mutationProbability,
-               int maxIterations, int maxIterationsNoImprovements) {
+    public SGA(GASetting<T> gaSetting, double mutationProbability) {
         super(gaSetting);
         if (0.0 <= mutationProbability && mutationProbability <= 1.0) {
             this.mutationProbability = mutationProbability;
         } else {
             this.mutationProbability = 0.1;
         }
-        this.maxIterations = Math.max(maxIterations, 1);
-        this.maxIterationsNoImprovements = Math.max(maxIterationsNoImprovements, 0);
     }
 
     // Method with no side effects
     public GAResults<T> run() throws CloneNotSupportedException {
         Random rand = new Random();
-        List<String> log = new ArrayList<>();
-        Stack<Population<T>> generations = new Stack<>();
 
         // Initialization of the first generation
-        generations.push(getPopulationInitializer().initialize());
-        Population<T> firstGeneration = generations.peek();
-        getFitnessFunction().evaluate(firstGeneration);
-        log.add("Gen 1) " + firstGeneration.getAverageFitness() + " (CurrentAvg)");
-        Population<T> bestGeneration = firstGeneration;
+        Population<T> firstGeneration = getPopulationInitializer().initialize();
+        addGeneration(firstGeneration);
 
-        int iterations = 1;
-        int iterationsNoImprovements = 0;
-        boolean maxNoImprovementsExceeded = false;
+        // Evaluation
+        getFitnessFunction().evaluate(firstGeneration);
+        System.out.println("Gen 1) " + firstGeneration.getAverageFitness() + " (CurrentAvg)");
+
+        int currentIteration = 1;
         do {
-            StringBuilder logEntry = new StringBuilder();
-            Population<T> currentGeneration = generations.peek();
+            Population<T> currentPopulation = getLastGeneration();
 
             // Selection
-            Population<T> matingPool = getSelectionOperator().apply(currentGeneration, rand);
+            Population<T> matingPool = getSelectionOperator().apply(currentPopulation, rand);
+
             // Crossover
             Population<T> offsprings = getCrossoverOperator().apply(matingPool, rand);
+
+            //TODO Where to move this probability logic? Probabbly when creating it in BinarySquareRunner. Same as crossover prob.
+
             // Mutation
             Population<T> newGeneration = offsprings;
             if (rand.nextDouble() <= mutationProbability) {
                 newGeneration = getMutationOperator().apply(offsprings, rand);
             }
+
+            // Confirm the new generation
             getFitnessFunction().evaluate(newGeneration);
-            generations.push(newGeneration);
-            iterations++;
-            logEntry.append("Gen ").append(iterations).append(") ");
+            addGeneration(newGeneration);
+            currentIteration++;
 
-            // Check if there is an average improvement
-            double bestAverageFitness = bestGeneration.getAverageFitness();
-            double newAverageFitness = newGeneration.getAverageFitness();
-            logEntry.append(newAverageFitness).append(" vs ").append(bestAverageFitness).append(" (NewAvg vs BestAvg)");
-
-            if (getFitnessFunction().isMaximum() && newGeneration.compareTo(bestGeneration) > 0 ||
-                    !getFitnessFunction().isMaximum() && newGeneration.compareTo(bestGeneration) < 0) {
-                bestGeneration = newGeneration;
-                iterationsNoImprovements = 0;
-                logEntry.append(" ==> Improvement");
-            } else {
-                iterationsNoImprovements++;
-                // Check if there is a limit of no improvements and this limit is exceeded
-                maxNoImprovementsExceeded = 0 < maxIterationsNoImprovements && maxIterationsNoImprovements < iterationsNoImprovements;
-                if (maxNoImprovementsExceeded) {
-                    logEntry.append(" ==> Early Stop");
-                }
-            }
-            log.add(logEntry.toString());
-        } while (iterations < maxIterations && !maxNoImprovementsExceeded);
-        return new GAResults<>(this, generations, bestGeneration, log);
-    }
-
-    public double getMutationProbability() {
-        return mutationProbability;
-    }
-
-    public int getMaxIterations() {
-        return maxIterations;
-    }
-
-    public int getMaxIterationsNoImprovements() {
-        return maxIterationsNoImprovements;
+            System.out.println("Gen " + currentIteration + ") " + currentPopulation.getAverageFitness() + " (Best: " + currentPopulation.getBestIndividual().getFitness() + ")");
+        }
+        while (!getStoppingCondition().checkStop(this));
+        return new GAResults<>(this);
     }
 }

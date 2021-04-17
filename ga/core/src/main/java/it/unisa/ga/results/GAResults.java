@@ -1,46 +1,31 @@
 package it.unisa.ga.results;
 
 import it.unisa.ga.individual.Individual;
-import it.unisa.ga.metaheuristic.GeneticAlgorithm;
+import it.unisa.ga.metaheuristic.GenerationalGA;
 import it.unisa.ga.population.Population;
 
 import java.util.List;
-import java.util.Stack;
 
 public class GAResults<T extends Individual> {
-    private final GeneticAlgorithm<T> geneticAlgorithm;
-    private final Stack<Population<T>> generations;
-    private final Population<T> bestGeneration;
-    private final List<String> log;
+    private final GenerationalGA<T> ga;
 
-    public GAResults(GeneticAlgorithm<T> geneticAlgorithm, Stack<Population<T>> generations, Population<T> bestGeneration, List<String> log) {
-        this.geneticAlgorithm = geneticAlgorithm;
-        this.generations = generations;
-        this.bestGeneration = bestGeneration;
-        this.log = log;
+    public GAResults(GenerationalGA<T> ga) {
+        this.ga = ga;
     }
 
-    public GeneticAlgorithm<T> getGeneticAlgorithm() {
-        return geneticAlgorithm;
-    }
-
-    public Stack<Population<T>> getGenerations() {
-        return generations;
+    public GenerationalGA<T> getGa() {
+        return ga;
     }
 
     public Population<T> getBestGeneration() {
-        return bestGeneration;
-    }
-
-    public List<String> getLog() {
-        return log;
-    }
-
-    public int getNumberOfIterations() {
-        return generations.size();
+        return ga.getBestGeneration();
     }
 
     public T getBestIndividual() {
-        return bestGeneration.getBestIndividual();
+        return getBestGeneration().getBestIndividual();
+    }
+
+    public int getNumberOfIterations() {
+        return getGa().getNumberOfGenerations();
     }
 }

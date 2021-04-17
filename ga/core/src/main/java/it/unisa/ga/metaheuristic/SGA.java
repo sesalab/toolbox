@@ -10,7 +10,6 @@ public class SGA<T extends Individual> extends GenerationalGA<T> {
         super(gaSetting);
     }
 
-    // Method with no side effects
     public GAResults<T> run() throws CloneNotSupportedException {
         // Initialization of the first generation
         Population<T> firstGeneration = getPopulationInitializer().initialize();

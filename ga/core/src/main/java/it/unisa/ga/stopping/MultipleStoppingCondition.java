@@ -12,10 +12,6 @@ public class MultipleStoppingCondition extends StoppingCondition {
         this.stoppingConditions = new ArrayList<>();
     }
 
-    public MultipleStoppingCondition(List<StoppingCondition> stoppingConditions) {
-        this.stoppingConditions = stoppingConditions;
-    }
-
     public void add(StoppingCondition stoppingCondition) {
         stoppingConditions.add(stoppingCondition);
     }

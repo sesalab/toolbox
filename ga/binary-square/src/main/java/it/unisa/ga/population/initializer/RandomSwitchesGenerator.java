@@ -2,10 +2,10 @@ package it.unisa.ga.population.initializer;
 
 import it.unisa.ga.individual.Switches;
 
-public class RandomSwitchSettingGenerator extends IndividualGenerator<Switches> {
+public class RandomSwitchesGenerator extends IndividualGenerator<Switches> {
     private final int sizeOfIndividuals;
 
-    public RandomSwitchSettingGenerator(int sizeOfIndividuals) {
+    public RandomSwitchesGenerator(int sizeOfIndividuals) {
         this.sizeOfIndividuals = sizeOfIndividuals;
     }
 

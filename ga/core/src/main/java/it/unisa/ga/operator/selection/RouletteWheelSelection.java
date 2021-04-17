@@ -12,18 +12,6 @@ public class RouletteWheelSelection<T extends Individual> extends SelectionOpera
         super(random);
     }
 
-    class WheelElement {
-        protected final T individual;
-        protected final double startPosition;
-        protected final double size;
-
-        protected WheelElement(T individual, double startPosition, double size) {
-            this.individual = individual;
-            this.startPosition = startPosition;
-            this.size = size;
-        }
-    }
-
     @Override
     public Population<T> apply(Population<T> population) throws CloneNotSupportedException {
         double totalFitness = population.stream()
@@ -60,5 +48,17 @@ public class RouletteWheelSelection<T extends Individual> extends SelectionOpera
             }
         }
         return newPopulation;
+    }
+
+    class WheelElement {
+        protected final T individual;
+        protected final double startPosition;
+        protected final double size;
+
+        protected WheelElement(T individual, double startPosition, double size) {
+            this.individual = individual;
+            this.startPosition = startPosition;
+            this.size = size;
+        }
     }
 }

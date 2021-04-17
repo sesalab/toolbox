@@ -21,16 +21,6 @@ public abstract class CrossoverOperator<T extends Individual> extends GeneticOpe
         }
     }
 
-    class Pairing {
-        protected final T firstIndividual;
-        protected final T secondIndividual;
-
-        protected Pairing(T firstIndividual, T secondIndividual) {
-            this.firstIndividual = firstIndividual;
-            this.secondIndividual = secondIndividual;
-        }
-    }
-
     public Population<T> apply(Population<T> population) throws CloneNotSupportedException {
         Population<T> offsprings = population.clone();
         offsprings.setId(population.getId() + 1);
@@ -80,5 +70,15 @@ public abstract class CrossoverOperator<T extends Individual> extends GeneticOpe
 
     public double getCrossoverProbability() {
         return crossoverProbability;
+    }
+
+    class Pairing {
+        protected final T firstIndividual;
+        protected final T secondIndividual;
+
+        protected Pairing(T firstIndividual, T secondIndividual) {
+            this.firstIndividual = firstIndividual;
+            this.secondIndividual = secondIndividual;
+        }
     }
 }

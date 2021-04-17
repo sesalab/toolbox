@@ -7,7 +7,7 @@ public class UpperBoundedPopulation<T extends Individual> extends Population<T> 
 
     public UpperBoundedPopulation(long id, int upperBound) {
         super(id);
-        this.upperBound = Math.max(upperBound, 0);
+        this.upperBound = Math.max(upperBound, 1);
     }
 
     @Override

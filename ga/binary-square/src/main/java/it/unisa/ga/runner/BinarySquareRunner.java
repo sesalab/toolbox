@@ -8,7 +8,7 @@ import it.unisa.ga.operator.crossover.SinglePointCrossover;
 import it.unisa.ga.operator.mutation.BitFlipMutation;
 import it.unisa.ga.operator.selection.RouletteWheelSelection;
 import it.unisa.ga.population.initializer.PopulationInitializer;
-import it.unisa.ga.population.initializer.RandomUpperBoundedPopulationInitializer;
+import it.unisa.ga.population.initializer.RandomSwitchesPopulationInitializer;
 import it.unisa.ga.results.GAResults;
 import it.unisa.ga.stopping.MaxIterationsStoppingCondition;
 import it.unisa.ga.stopping.MaxNoImprovementsStoppingConditions;
@@ -17,7 +17,7 @@ import it.unisa.ga.stopping.MultipleStoppingCondition;
 import java.util.Map;
 import java.util.Random;
 
-public class BinarySquareRunner extends Runner {
+public class BinarySquareRunner extends GARunner {
     public void run(Map<String, Double> input) throws CloneNotSupportedException {
         int numberOfIndividuals = input.get("numberOfIndividuals").intValue();
         int sizeOfIndividuals = input.get("sizeOfIndividuals").intValue();
@@ -28,7 +28,7 @@ public class BinarySquareRunner extends Runner {
 
         Random random = new Random();
         SquareFunction fitnessFunction = new SquareFunction();
-        PopulationInitializer<Switches> populationInitializer = new RandomUpperBoundedPopulationInitializer(numberOfIndividuals, sizeOfIndividuals);
+        PopulationInitializer<Switches> populationInitializer = new RandomSwitchesPopulationInitializer(numberOfIndividuals, sizeOfIndividuals);
         RouletteWheelSelection<Switches> selectionOperator = new RouletteWheelSelection<>(random);
         SinglePointCrossover<Switches> crossoverOperator = new SinglePointCrossover<>(crossoverProbability, random);
         BitFlipMutation<Switches> mutationOperator = new BitFlipMutation<>(mutationProbability, random);

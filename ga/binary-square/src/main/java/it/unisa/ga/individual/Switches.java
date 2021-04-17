@@ -8,7 +8,7 @@ public class Switches extends EncodedIndividual<String> implements Decodable<Int
 
     @Override
     public Integer decode() {
-        return Integer.parseUnsignedInt(getCoding(), 2);
+        return Integer.parseUnsignedInt(getEncoding(), 2);
     }
 
 }

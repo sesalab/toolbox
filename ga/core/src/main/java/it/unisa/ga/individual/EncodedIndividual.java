@@ -1,24 +1,24 @@
 package it.unisa.ga.individual;
 
 public abstract class EncodedIndividual<T> extends Individual {
-    protected T coding;
+    protected T encoding;
 
-    public EncodedIndividual(T coding) {
-        this.coding = coding;
+    public EncodedIndividual(T encoding) {
+        this.encoding = encoding;
     }
 
-    public T getCoding() {
-        return coding;
+    public T getEncoding() {
+        return encoding;
     }
 
-    public void setCoding(T coding) {
-        this.coding = coding;
+    public void setEncoding(T encoding) {
+        this.encoding = encoding;
     }
 
     @Override
     public String toString() {
         return "EncodedIndividual{" +
-                "coding=" + coding +
+                "coding=" + encoding +
                 ", fitness=" + fitness +
                 '}';
     }

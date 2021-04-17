@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 public class RouletteWheelSelection<T extends Individual> extends SelectionOperator<T> {
+    public RouletteWheelSelection(Random random) {
+        super(random);
+    }
+
     class WheelElement {
         protected final T individual;
         protected final double startPosition;
@@ -21,7 +25,7 @@ public class RouletteWheelSelection<T extends Individual> extends SelectionOpera
     }
 
     @Override
-    public Population<T> apply(Population<T> population, Random rand) throws CloneNotSupportedException {
+    public Population<T> apply(Population<T> population) throws CloneNotSupportedException {
         double totalFitness = population.stream()
                 .map(Individual::getFitness)
                 .reduce(Double::sum)
@@ -46,7 +50,7 @@ public class RouletteWheelSelection<T extends Individual> extends SelectionOpera
         newPopulation.setId(population.getId() + 1);
         newPopulation.clear();
         for (int i = 0; i < rouletteWheel.size(); i++) {
-            double pointer = rand.nextDouble();
+            double pointer = getRandom().nextDouble();
             for (WheelElement element : rouletteWheel) {
                 if (element.startPosition <= pointer && pointer < element.startPosition + element.size) {
                     T winner = element.individual;

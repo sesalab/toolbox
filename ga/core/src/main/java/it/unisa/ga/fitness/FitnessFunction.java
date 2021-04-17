@@ -5,7 +5,7 @@ import it.unisa.ga.population.Population;
 
 import java.util.Collections;
 
-// The genetic T is the type of Individuals on which it could be applied
+// The generic T is the type of Individuals on which it could be applied
 public abstract class FitnessFunction<T extends Individual> {
     private final boolean isMaximum;
 

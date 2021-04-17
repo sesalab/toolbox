@@ -7,17 +7,51 @@ import it.unisa.ga.population.Population;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public abstract class CrossoverOperator<T extends Individual> extends GeneticOperator<T> {
-    class Pairing {
-        protected final T firstParent;
-        protected final T secondParent;
+    private final double crossoverProbability;
 
-        protected Pairing(T firstParent, T secondParent) {
-            this.firstParent = firstParent;
-            this.secondParent = secondParent;
+    public CrossoverOperator(double crossoverProbability, Random random) {
+        super(random);
+        if (0.0 <= crossoverProbability && crossoverProbability <= 1.0) {
+            this.crossoverProbability = crossoverProbability;
+        } else {
+            this.crossoverProbability = 0.1;
         }
     }
+
+    class Pairing {
+        protected final T firstIndividual;
+        protected final T secondIndividual;
+
+        protected Pairing(T firstIndividual, T secondIndividual) {
+            this.firstIndividual = firstIndividual;
+            this.secondIndividual = secondIndividual;
+        }
+    }
+
+    public Population<T> apply(Population<T> population) throws CloneNotSupportedException {
+        Population<T> offsprings = population.clone();
+        offsprings.setId(population.getId() + 1);
+        offsprings.clear();
+
+        // Pair and cross parents
+        List<Pairing> pairings = makeRandomPairings(population);
+        for (Pairing pairing : pairings) {
+            if (getRandom().nextDouble() < getCrossoverProbability()) {
+                Pairing children = cross(pairing);
+                offsprings.add(children.firstIndividual);
+                offsprings.add(children.secondIndividual);
+            } else {
+                offsprings.add((T) pairing.firstIndividual.clone());
+                offsprings.add((T) pairing.secondIndividual.clone());
+            }
+        }
+        return offsprings;
+    }
+
+    protected abstract Pairing cross(Pairing pairing) throws CloneNotSupportedException;
 
     protected List<Pairing> makeRandomPairings(Population<T> population) {
         List<Pairing> pairings = new ArrayList<>();
@@ -42,5 +76,9 @@ public abstract class CrossoverOperator<T extends Individual> extends GeneticOpe
             }
         }
         return pairings;
+    }
+
+    public double getCrossoverProbability() {
+        return crossoverProbability;
     }
 }

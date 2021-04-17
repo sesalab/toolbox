@@ -1,13 +1,7 @@
 package it.unisa.ga.individual;
 
-public class Switches extends EncodedIndividual<String> implements Decodable<Integer> {
-    public Switches(String coding) {
-        super(coding);
+public class Switches extends BinaryIndividual {
+    public Switches(String encoding) {
+        super(encoding);
     }
-
-    @Override
-    public Integer decode() {
-        return Integer.parseUnsignedInt(getEncoding(), 2);
-    }
-
 }

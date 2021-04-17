@@ -2,7 +2,7 @@ package it.unisa.ga.initializer;
 
 import it.unisa.ga.individual.SwitchSetting;
 
-public class RandomSwitchSettingGenerator extends IndividualGenerator {
+public class RandomSwitchSettingGenerator extends IndividualGenerator<SwitchSetting> {
     private final int sizeOfIndividuals;
 
     public RandomSwitchSettingGenerator(int sizeOfIndividuals) {

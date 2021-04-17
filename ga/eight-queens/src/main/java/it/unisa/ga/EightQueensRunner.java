@@ -3,7 +3,7 @@ package it.unisa.ga;
 import it.unisa.ga.fitness.ConflictsFunction;
 import it.unisa.ga.individual.ChessboardIndividual;
 import it.unisa.ga.initializer.FixedSizeChessboardRandomInitializer;
-import it.unisa.ga.metaheuristic.SimpleGeneticAlgorithm;
+import it.unisa.ga.metaheuristic.SGA;
 import it.unisa.ga.operator.crossover.ChessboardSinglePointCrossover;
 import it.unisa.ga.operator.mutation.ChessboardSinglePointMutation;
 import it.unisa.ga.operator.selection.RouletteWheelSelection;
@@ -26,7 +26,7 @@ public class EightQueensRunner {
         ChessboardSinglePointCrossover crossoverOperator = new ChessboardSinglePointCrossover();
         ChessboardSinglePointMutation mutationOperator = new ChessboardSinglePointMutation();
 
-        SimpleGeneticAlgorithm<ChessboardIndividual> geneticAlgorithm = new SimpleGeneticAlgorithm<>(fitnessFunction, initializer,
+        SGA<ChessboardIndividual> geneticAlgorithm = new SGA<>(fitnessFunction, initializer,
                 selectionOperator, crossoverOperator, mutationOperator, mutationProbability, maxIterations, maxIterationsNoImprovements);
         Results<ChessboardIndividual> results = geneticAlgorithm.run();
         ChessboardIndividual bestIndividual = results.getBestIndividual();

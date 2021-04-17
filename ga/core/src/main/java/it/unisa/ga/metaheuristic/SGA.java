@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
-public class SimpleGeneticAlgorithm<T extends Individual> extends GeneticAlgorithm<T> {
+public class SGA<T extends Individual> extends GeneticAlgorithm<T> {
     // We set probability of doing a mutation. If provided invalid, 0.1 is set.
     private final double mutationProbability;
     // One of the stopping condition is reaching the maximum number of allowed iterations (at least > 0)
@@ -22,10 +22,10 @@ public class SimpleGeneticAlgorithm<T extends Individual> extends GeneticAlgorit
     // Early stop if there are no improvements for more than X generations
     private final int maxIterationsNoImprovements;
 
-    public SimpleGeneticAlgorithm(FitnessFunction<T> fitnessFunction, PopulationInitializer<T> populationInitializer,
-                                  SelectionOperator<T> selectionOperator, CrossoverOperator<T> crossoverOperator,
-                                  MutationOperator<T> mutationOperator, double mutationProbability,
-                                  int maxIterations, int maxIterationsNoImprovements) {
+    public SGA(FitnessFunction<T> fitnessFunction, PopulationInitializer<T> populationInitializer,
+               SelectionOperator<T> selectionOperator, CrossoverOperator<T> crossoverOperator,
+               MutationOperator<T> mutationOperator, double mutationProbability,
+               int maxIterations, int maxIterationsNoImprovements) {
         super(fitnessFunction, populationInitializer, selectionOperator, crossoverOperator, mutationOperator);
         if (0.0 <= mutationProbability && mutationProbability <= 1.0) {
             this.mutationProbability = mutationProbability;

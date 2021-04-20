@@ -2,13 +2,15 @@ package it.unisa.ga.runner;
 
 import it.unisa.ga.fitness.SquareFunction;
 import it.unisa.ga.individual.BinaryIndividual;
+import it.unisa.ga.individual.generator.IndividualGenerator;
+import it.unisa.ga.individual.generator.RandomBinaryIndividualGenerator;
 import it.unisa.ga.metaheuristic.GenerationalGA;
 import it.unisa.ga.metaheuristic.SGA;
 import it.unisa.ga.operator.crossover.SinglePointCrossover;
 import it.unisa.ga.operator.mutation.BitFlipMutation;
 import it.unisa.ga.operator.selection.RouletteWheelSelection;
 import it.unisa.ga.population.initializer.PopulationInitializer;
-import it.unisa.ga.population.initializer.RandomBinaryIndividualPopulationInitializer;
+import it.unisa.ga.population.initializer.UpperBoundedPopulationInitializer;
 import it.unisa.ga.results.GAResults;
 import it.unisa.ga.stopping.MaxIterationsStoppingCondition;
 import it.unisa.ga.stopping.MaxNoImprovementsStoppingConditions;
@@ -28,7 +30,8 @@ public class BinarySquareRunner extends GARunner {
 
         Random random = new Random();
         SquareFunction fitnessFunction = new SquareFunction();
-        PopulationInitializer<BinaryIndividual> populationInitializer = new RandomBinaryIndividualPopulationInitializer(numberOfIndividuals, sizeOfIndividuals);
+        IndividualGenerator<BinaryIndividual> randomBinaryIndividualGenerator = new RandomBinaryIndividualGenerator(sizeOfIndividuals, random);
+        PopulationInitializer<BinaryIndividual> populationInitializer = new UpperBoundedPopulationInitializer<>(numberOfIndividuals, randomBinaryIndividualGenerator);
         RouletteWheelSelection<BinaryIndividual> selectionOperator = new RouletteWheelSelection<>(random);
         SinglePointCrossover<BinaryIndividual> crossoverOperator = new SinglePointCrossover<>(crossoverProbability, random);
         BitFlipMutation<BinaryIndividual> mutationOperator = new BitFlipMutation<>(mutationProbability, random);

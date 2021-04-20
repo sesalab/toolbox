@@ -10,12 +10,13 @@ public class SGA<T extends Individual> extends GenerationalGA<T> {
         super(gaSetting);
     }
 
+    @Override
     public GAResults<T> run() throws CloneNotSupportedException {
         // Initialization of the first generation
         Population<T> firstGeneration = getPopulationInitializer().initialize();
-        addGeneration(firstGeneration);
+        this.addGeneration(firstGeneration);
         // Evaluation
-        getFitnessFunction().evaluate(firstGeneration);
+        this.getFitnessFunction().evaluate(firstGeneration);
         System.out.println("Gen 1) " + firstGeneration.getAverageFitness() + " (CurrentAvg)");
         int currentIteration = 1;
         do {
@@ -27,8 +28,8 @@ public class SGA<T extends Individual> extends GenerationalGA<T> {
             // Mutation
             Population<T> newGeneration = getMutationOperator().apply(offsprings);
             // Confirm the new generation
-            getFitnessFunction().evaluate(newGeneration);
-            addGeneration(newGeneration);
+            this.getFitnessFunction().evaluate(newGeneration);
+            this.addGeneration(newGeneration);
             currentIteration++;
             System.out.println("Gen " + currentIteration + ") " + currentPopulation.getAverageFitness() + " (Best: " + currentPopulation.getBestIndividual().getFitness() + ")");
         }

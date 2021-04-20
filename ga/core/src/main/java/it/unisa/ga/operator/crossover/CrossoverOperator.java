@@ -21,6 +21,7 @@ public abstract class CrossoverOperator<T extends Individual> extends GeneticOpe
         }
     }
 
+    @Override
     public Population<T> apply(Population<T> population) throws CloneNotSupportedException {
         Population<T> offsprings = population.clone();
         offsprings.setId(population.getId() + 1);
@@ -40,8 +41,6 @@ public abstract class CrossoverOperator<T extends Individual> extends GeneticOpe
         }
         return offsprings;
     }
-
-    protected abstract Pairing cross(Pairing pairing) throws CloneNotSupportedException;
 
     protected List<Pairing> makeRandomPairings(Population<T> population) {
         List<Pairing> pairings = new ArrayList<>();
@@ -67,6 +66,8 @@ public abstract class CrossoverOperator<T extends Individual> extends GeneticOpe
         }
         return pairings;
     }
+
+    protected abstract Pairing cross(Pairing pairing) throws CloneNotSupportedException;
 
     public double getCrossoverProbability() {
         return crossoverProbability;

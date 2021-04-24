@@ -26,13 +26,10 @@ public class Computation implements Study {
 
     public static void main(String[] args) {
         Computation.file = new File(args[0]);
-        //Computation.file = new File("/Users/fabiopalomba/Desktop/file.csv");
         Computation.pathToRepositories = args[1];
-        //Computation.pathToRepositories = "/Users/fabiopalomba/Desktop/repos/";
-        Computation.outputChurnPath = "./code_churn_ref_commits.csv";
-        Computation.outputPath = "./control_metrics.csv";
+        Computation.outputChurnPath = args[2];
+        Computation.outputPath = args[3];
         Computation.output = new CSVFile("./output.csv");
-
         new RepoDriller().start(new Computation());
     }
 

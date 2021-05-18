@@ -1,4 +1,4 @@
-package org.computemetrics.parser;
+package org.computemetrics.parser.visitor;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;

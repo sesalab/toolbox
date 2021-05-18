@@ -3,6 +3,8 @@ package org.computemetrics.parser;
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
+import org.computemetrics.parser.visitor.InstanceVariableVisitor;
+import org.computemetrics.parser.visitor.MethodVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;

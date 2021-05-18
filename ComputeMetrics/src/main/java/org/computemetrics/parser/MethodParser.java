@@ -2,6 +2,8 @@ package org.computemetrics.parser;
 
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
+import org.computemetrics.parser.visitor.InvocationVisitor;
+import org.computemetrics.parser.visitor.NameVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import java.util.ArrayList;

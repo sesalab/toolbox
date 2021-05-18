@@ -46,25 +46,25 @@ public class ComputeMetrics {
         for (String metric : input.getMetrics()) {
             switch (metric) {
                 case LOC:
-                    metrics.put(LOC, (double) NewCKMetrics.getLOC(classBean));
+                    metrics.put(LOC, (double) ClassMetrics.getLOC(classBean));
                     break;
                 case ELOC:
-                    metrics.put(ELOC, (double) NewCKMetrics.getELOC(classBean));
+                    metrics.put(ELOC, (double) ClassMetrics.getELOC(classBean));
                     break;
                 case WMC:
-                    metrics.put(WMC, (double) NewCKMetrics.getMcCabeMetric(classBean));
+                    metrics.put(WMC, (double) ClassMetrics.getWMC(classBean));
                     break;
                 case CBO:
-                    metrics.put(CBO, (double) NewCKMetrics.getCBO(classBean));
+                    metrics.put(CBO, (double) ClassMetrics.getCBO(classBean));
                     break;
                 case RFC:
-                    metrics.put(RFC, (double) NewCKMetrics.getRFC(classBean));
+                    metrics.put(RFC, (double) ClassMetrics.getRFC(classBean));
                     break;
                 case LCOM1:
-                    metrics.put(LCOM1, (double) NewCKMetrics.getLCOM(classBean));
+                    metrics.put(LCOM1, (double) ClassMetrics.getLCOM1(classBean));
                     break;
                 case LCOM2:
-                    metrics.put(LCOM2, (double) NewCKMetrics.getLCOM2(classBean));
+                    metrics.put(LCOM2, (double) ClassMetrics.getLCOM2(classBean));
                     break;
             }
         }

@@ -19,6 +19,9 @@ public class ComputeMetrics {
     private final Input input;
     private static final String LOC = "LOC";
     private static final String ELOC = "ELOC";
+    private static final String NOA = "NOA";
+    private static final String NOPA = "NOPA";
+    private static final String NOM = "NOM";
     private static final String WMC = "WMC";
     private static final String CBO = "CBO";
     private static final String RFC = "RFC";
@@ -50,6 +53,15 @@ public class ComputeMetrics {
                     break;
                 case ELOC:
                     metrics.put(ELOC, (double) ClassMetrics.getELOC(classBean));
+                    break;
+                case NOA:
+                    metrics.put(NOA, (double) ClassMetrics.getNOA(classBean));
+                    break;
+                case NOPA:
+                    metrics.put(NOPA, (double) ClassMetrics.getNOPA(classBean));
+                    break;
+                case NOM:
+                    metrics.put(NOM, (double) ClassMetrics.getNOM(classBean));
                     break;
                 case WMC:
                     metrics.put(WMC, (double) ClassMetrics.getWMC(classBean));

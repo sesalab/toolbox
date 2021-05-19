@@ -31,6 +31,8 @@ public class ComputeMetrics {
     private static final String NOO = "NOO";
     private static final String LCOM1 = "LCOM1";
     private static final String LCOM2 = "LCOM2";
+    private static final String TCC = "TCC";
+    private static final String LCC = "LCC";
 
     public ComputeMetrics(Input input) {
         this.input = input;
@@ -112,8 +114,14 @@ public class ComputeMetrics {
                 case LCOM2:
                     metrics.put(LCOM2, (double) ClassMetrics.getLCOM2(classBean));
                     break;
+                case TCC:
+                    metrics.put(TCC, ClassMetrics.getTCC(classBean));
+                    break;
+                case LCC:
+                    metrics.put(LCC, ClassMetrics.getLCC(classBean));
+                    break;
             }
         }
-        return new Output(input.getDirectory(), input.getFile(), metrics);
+        return metrics;
     }
 }

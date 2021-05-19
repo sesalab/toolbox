@@ -3,7 +3,7 @@ package org.computemetrics.core;
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
-import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -218,7 +218,8 @@ public class ClassMetrics {
         int noa = 0;
         for (MethodBean method : cb.getMethods()) {
             if (matchSuperMethod(method, superClass) == null) {
-                noa++;;
+                noa++;
+                ;
             }
         }
         return noa;
@@ -239,7 +240,8 @@ public class ClassMetrics {
         int noo = 0;
         for (MethodBean method : cb.getMethods()) {
             if (matchSuperMethod(method, superClass) != null) {
-                noo++;;
+                noo++;
+                ;
             }
         }
         return noo;
@@ -290,7 +292,46 @@ public class ClassMetrics {
         }
     }
 
-    //TODO Implement LCC, TCC, LCOM5, Halsteads metrics
+    //TODO Implement LCOM5, Halsteads metrics
+
+    public static double getTCC(ClassBean cb) {
+        List<MethodBean> visibleMethods = cb.getMethods().stream().filter(m -> m.getVisibility() != 0).collect(Collectors.toList());
+        int possibleConnections = visibleMethods.size() * (visibleMethods.size() - 1) / 2;
+        if (possibleConnections <= 1) {
+            return 0;
+        }
+        int directConnections = 0;
+        for (int i = 0; i < visibleMethods.size() - 1; i++) {
+            for (int j = i + 1; j < visibleMethods.size(); j++) {
+                MethodBean methodA = visibleMethods.get(i);
+                MethodBean methodB = visibleMethods.get(j);
+                if (shareAnInstanceVariable(methodA, methodB) || existDirectDependency(methodA, methodB)) {
+                    directConnections++;
+                }
+            }
+        }
+        return (float) directConnections / possibleConnections;
+    }
+
+    public static double getLCC(ClassBean cb) {
+        List<MethodBean> visibleMethods = cb.getMethods().stream().filter(m -> m.getVisibility() != 0).collect(Collectors.toList());
+        int possibleConnections = visibleMethods.size() * (visibleMethods.size() - 1) / 2;
+        if (possibleConnections <= 1) {
+            return 0;
+        }
+        int indirectConnections = 0;
+        for (int i = 0; i < visibleMethods.size() - 1; i++) {
+            for (int j = i + 1; j < visibleMethods.size(); j++) {
+                MethodBean methodA = visibleMethods.get(i);
+                MethodBean methodB = visibleMethods.get(j);
+                if (existIndirectDependency(methodA, methodB)) {
+                    indirectConnections++;
+                }
+            }
+        }
+        return getTCC(cb) + (float) indirectConnections / possibleConnections;
+    }
+
 
     /**
      * Computes part of Message Passing Coupling (MPC), that is the number of method calls from a class to another.
@@ -344,4 +385,57 @@ public class ClassMetrics {
         }
         return false;
     }
+
+    private static boolean existDirectDependency(MethodBean m1, MethodBean m2) {
+        for (MethodBean methodCall : m1.getMethodCalls()) {
+            String name = methodCall.getName();
+            if (name.equals(m2.getName())) {
+                int size = methodCall.getParameters().size();
+                if (size == m2.getParameters().size()) {
+                    return true;
+                }
+            }
+        }
+        for (MethodBean methodCall : m2.getMethodCalls()) {
+            String name = methodCall.getName();
+            if (name.equals(m1.getName())) {
+                int size = methodCall.getParameters().size();
+                if (size == m1.getParameters().size()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+        /*
+        return m1.getMethodCalls().stream()
+                .anyMatch(mc -> mc.getName().equals(m2.getName()) &&
+                        (mc.getParameters().size() == m2.getParameters().size()))
+                ||
+                m2.getMethodCalls().stream()
+                        .anyMatch(mc -> mc.getName().equals(m1.getName()) &&
+                                (mc.getParameters().size() == m1.getParameters().size()));
+         */
+    }
+
+    private static Collection<MethodBean> getCalledMethods(MethodBean mb) {
+        Set<MethodBean> fullCalledMethods = new HashSet<>();
+        Set<MethodBean> calledMethods = new HashSet<>();
+        calledMethods.add(mb);
+        while (true) {
+            Set<MethodBean> newCalledMethods = new HashSet<>();
+            for (MethodBean calledMethod : calledMethods) {
+                newCalledMethods.addAll(calledMethod.getMethodCalls());
+            }
+            if (fullCalledMethods.containsAll(newCalledMethods)) {
+                return fullCalledMethods;
+            }
+            fullCalledMethods.addAll(newCalledMethods);
+            calledMethods = newCalledMethods;
+        }
+    }
+
+    private static boolean existIndirectDependency(MethodBean m1, MethodBean m2) {
+        return getCalledMethods(m1).contains(m2) || getCalledMethods(m2).contains(m1);
+    }
+
 }

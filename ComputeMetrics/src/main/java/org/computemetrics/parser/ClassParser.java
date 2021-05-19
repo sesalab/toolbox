@@ -70,10 +70,14 @@ public class ClassParser {
         }
         classBean.setNumberOfGetterAndSetter(numberOfGetterOrSetter);
 
-        for (MethodBean classMethod : methodBeans) {
-            Collection<MethodBean> classMethodInvocations = classMethod.getMethodCalls();
-            Collection<MethodBean> definedInvocations = new ArrayList<>(classMethodInvocations);
-            classMethod.setMethodCalls(definedInvocations);
+        // This replacement must be done to use the corrent MethodBean (with all data) to enable intra-class call graph
+        for (MethodBean outerMethod : methodBeans) {
+            Collection<MethodBean> methodCalls = outerMethod.getMethodCalls();
+            Collection<MethodBean> fixedMethodCalls = new ArrayList<>();
+            for (MethodBean methodCall : methodCalls) {
+                methodBeans.stream().filter(mb -> mb.getName().equals(methodCall.getName())).findFirst().ifPresent(fixedMethodCalls::add);
+            }
+            outerMethod.setMethodCalls(fixedMethodCalls);
         }
         classBean.setMethods(methodBeans);
         classBean.setTypeDeclaration(typeDeclaration);

@@ -1,19 +1,18 @@
 package org.computemetrics.core;
 
+import org.apache.commons.io.FileUtils;
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.parser.ClassParser;
 import org.computemetrics.parser.CodeParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ComputeMetrics {
     private final Input input;
@@ -33,18 +32,34 @@ public class ComputeMetrics {
     }
 
     public Output run() throws IOException {
-        Path filepath = Paths.get(input.getDirectory(), input.getFile()).toAbsolutePath();
-        CompilationUnit targetCU = new CodeParser().createParser(new String(Files.readAllBytes(filepath)));
-        if (targetCU.types().size() == 0) {
-            throw new RuntimeException("Cannot parse " + filepath);
+        // Parse all .java files in input.getDirectory()
+        // TODO Parse all only if certain metrics are used (DIT etc)
+        Collection<File> javaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
+        Collection<ClassBean> classBeans = new HashSet<>();
+        for (File javaFile : javaFiles) {
+            Path filePath = javaFile.toPath().toAbsolutePath();
+            CompilationUnit fileCU = new CodeParser().createParser(new String(Files.readAllBytes(filePath)));
+            if (fileCU.types().size() == 0) {
+                System.err.println("Could not parse file: " + filePath);
+            } else {
+                TypeDeclaration typeDeclaration = (TypeDeclaration) fileCU.types().get(0);
+                List<String> imports = new ArrayList<>();
+                for (Object anImport : fileCU.imports()) {
+                    imports.add(anImport.toString());
+                }
+                ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage().getName().getFullyQualifiedName(), imports);
+                classBean.setPathToClass(filePath.toAbsolutePath().toString());
+                classBeans.add(classBean);
+            }
         }
-        TypeDeclaration typeDeclaration = (TypeDeclaration) targetCU.types().get(0);
-        List<String> imports = new ArrayList<>();
-        for (Object anImport : targetCU.imports()) {
-            imports.add(anImport.toString());
+
+        Path targetFilePath = Paths.get(input.getDirectory(), input.getFile()).toAbsolutePath();
+        ClassBean classBean = classBeans.stream()
+                .filter(cb -> cb.getPathToClass().equals(targetFilePath.toString()))
+                .findFirst().orElse(null);
+        if (classBean == null) {
+            throw new RuntimeException("Target file not found: aborting...");
         }
-        ClassBean classBean = ClassParser.parse(typeDeclaration, targetCU.getPackage().getName().getFullyQualifiedName(), imports);
-        classBean.setPathToClass(filepath.toAbsolutePath().toString());
         Map<String, Double> metrics = new LinkedHashMap<>();
         for (String metric : input.getMetrics()) {
             switch (metric) {

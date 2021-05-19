@@ -23,13 +23,21 @@ public class ClassMetrics {
     }
 
     /**
-     * Computes Effective Lines of Code, that is LOC without empty lines, of a class.
+     * Computes Source Lines of Code, that is LOC without comment lines, of a class.
      *
      * @param cb
      * @return
      */
-    public static int getELOC(ClassBean cb) {
-        return cb.getTextContent().split("\r\n|\r|\n").length;
+    public static int getSLOC(ClassBean cb) {
+        int sloc = 0;
+        String[] lines = Pattern.compile("\r\n|\r|\n").split(cb.getTextContent());
+        for (String line : lines) {
+            boolean matched = Pattern.compile("\\*|//|/\\*(\\*)?").matcher(line.trim()).find();
+            if (!matched) {
+                sloc++;
+            }
+        }
+        return sloc;
     }
 
     /**
@@ -305,6 +313,8 @@ public class ClassMetrics {
             return (notShare - share);
         }
     }
+
+    //TODO Implement LCC, TCC, NOPA (private), LCOM5, Halsteads metrics, MI
 
     private static boolean shareAnInstanceVariable(MethodBean m1, MethodBean m2) {
         for (InstanceVariableBean i : m1.getUsedInstanceVariables()) {

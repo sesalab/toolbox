@@ -28,7 +28,7 @@ public class ClassParser {
         else
             classBean.setSuperclass(null);
 
-        String[] lines = Pattern.compile("\n").split(pClassNode.toString());
+        String[] lines = Pattern.compile("\r\n|\r|\n").split(pClassNode.toString());
         classBean.setLOC(lines.length);
 
         Collection<FieldDeclaration> instanceVariableNodes = new ArrayList<>();

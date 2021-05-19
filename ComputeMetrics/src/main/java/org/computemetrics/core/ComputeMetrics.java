@@ -18,7 +18,7 @@ import java.util.Map;
 public class ComputeMetrics {
     private final Input input;
     private static final String LOC = "LOC";
-    private static final String ELOC = "ELOC";
+    private static final String SLOC = "SLOC";
     private static final String NOA = "NOA";
     private static final String NOPA = "NOPA";
     private static final String NOM = "NOM";
@@ -51,8 +51,8 @@ public class ComputeMetrics {
                 case LOC:
                     metrics.put(LOC, (double) ClassMetrics.getLOC(classBean));
                     break;
-                case ELOC:
-                    metrics.put(ELOC, (double) ClassMetrics.getELOC(classBean));
+                case SLOC:
+                    metrics.put(SLOC, (double) ClassMetrics.getSLOC(classBean));
                     break;
                 case NOA:
                     metrics.put(NOA, (double) ClassMetrics.getNOA(classBean));

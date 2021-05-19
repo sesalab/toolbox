@@ -12,31 +12,32 @@ import java.util.HashSet;
 
 public class MethodParser {
 
-    public static MethodBean parse(MethodDeclaration pMethodNode, Collection<InstanceVariableBean> pClassInstanceVariableBeans) {
+    public static MethodBean parse(MethodDeclaration methodDeclaration, Collection<InstanceVariableBean> pClassInstanceVariableBeans) {
         MethodBean methodBean = new MethodBean();
-        methodBean.setName(pMethodNode.getName().toString());
-        methodBean.setParameters(pMethodNode.parameters());
-        methodBean.setReturnType(pMethodNode.getReturnType2());
-        methodBean.setTextContent(pMethodNode.toString());
+        methodBean.setName(methodDeclaration.getName().toString());
+        methodBean.setParameters(methodDeclaration.parameters());
+        methodBean.setReturnType(methodDeclaration.getReturnType2());
+        methodBean.setTextContent(methodDeclaration.toString());
 
-        if (pMethodNode.toString().contains("private ")) {
+        if (methodDeclaration.toString().contains("private ")) {
             methodBean.setVisibility(0);
-        } else if (pMethodNode.toString().contains("protected ")) {
+        } else if (methodDeclaration.toString().contains("protected ")) {
             methodBean.setVisibility(1);
         } else methodBean.setVisibility(2);
 
         Collection<String> names = new HashSet<>();
-        pMethodNode.accept(new NameVisitor(names));
+        methodDeclaration.accept(new NameVisitor(names));
         Collection<InstanceVariableBean> usedInstanceVariableBeans = getUsedInstanceVariable(names, pClassInstanceVariableBeans);
         methodBean.setUsedInstanceVariables(usedInstanceVariableBeans);
 
         Collection<String> invocations = new HashSet<>();
-        pMethodNode.accept(new InvocationVisitor(invocations));
+        methodDeclaration.accept(new InvocationVisitor(invocations));
         Collection<MethodBean> invocationBeans = new ArrayList<>();
         for (String invocation : invocations) {
             invocationBeans.add(InvocationParser.parse(invocation));
         }
         methodBean.setMethodCalls(invocationBeans);
+        methodBean.setMethodDeclaration(methodDeclaration);
         return methodBean;
     }
 

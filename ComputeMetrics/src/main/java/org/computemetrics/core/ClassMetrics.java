@@ -3,12 +3,15 @@ package org.computemetrics.core;
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
+import org.eclipse.jdt.core.dom.Type;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ClassMetrics {
 
@@ -56,9 +59,21 @@ public class ClassMetrics {
      * @param cb
      * @return
      */
-    public static int getNOPA(ClassBean cb) {
+    public static int getNOPubA(ClassBean cb) {
         return (int) cb.getInstanceVariables().stream()
                 .filter(v -> v.getVisibility().equals("public"))
+                .count();
+    }
+
+    /**
+     * Computes Number of Public Attributes (fields or instance variables) of a class.
+     *
+     * @param cb
+     * @return
+     */
+    public static int getNOPrivA(ClassBean cb) {
+        return (int) cb.getInstanceVariables().stream()
+                .filter(v -> v.getVisibility().equals("private"))
                 .count();
     }
 
@@ -142,39 +157,6 @@ public class ClassMetrics {
     }
 
     /**
-     * Computes part of Message Passing Coupling (MPC), that is the number of method calls from a class to another.
-     *
-     * @param c1
-     * @param c2
-     * @return
-     */
-    private static int getOneSideMPC(ClassBean c1, ClassBean c2) {
-        int mpc = 0;
-        for (MethodBean method : c1.getMethods()) {
-            for (MethodBean calledMethod : method.getMethodCalls()) {
-                for (MethodBean methodC2 : c2.getMethods()) {
-                    if (calledMethod.getName().equalsIgnoreCase(methodC2.getName())) {
-                        mpc++;
-                    }
-                }
-            }
-        }
-        return mpc;
-    }
-
-    /**
-     * Compute total number of outgoing method calls (outgoing messages)
-     *
-     * @param cb
-     * @return
-     */
-    private static int getNumTotalMethodCalls(ClassBean cb) {
-        return cb.getMethods().stream()
-                .map(m -> m.getMethodCalls().size())
-                .reduce(0, Integer::sum);
-    }
-
-    /**
      * Computes Response for a Class, that is the number of distinct outgoing messages and number of methods.
      *
      * @param cb
@@ -188,12 +170,6 @@ public class ClassMetrics {
         return distinctMethodCalls.size() + cb.getMethods().size();
     }
 
-    private static ClassBean getSuperclass(ClassBean cb, List<ClassBean> classes) {
-        return classes.stream()
-                .filter(c -> c.getName().equals(cb.getSuperclass()))
-                .findFirst().orElse(null);
-    }
-
     /**
      * Computes Depth of Inheritance of a class.
      *
@@ -201,10 +177,10 @@ public class ClassMetrics {
      * @param classes
      * @return
      */
-    public static int getDIT(ClassBean cb, List<ClassBean> classes) {
-        ClassBean superClass = getSuperclass(cb, classes);
+    public static int getDIT(ClassBean cb, Collection<ClassBean> classes) {
+        ClassBean superClass = getSuperclassBean(cb, classes);
         if (superClass == null) {
-            return 0;
+            return 1;
         }
         int superDit = getDIT(superClass, classes);
         return superDit + 1;
@@ -217,7 +193,7 @@ public class ClassMetrics {
      * @param classes
      * @return
      */
-    public static int getNOC(ClassBean cb, List<ClassBean> classes) {
+    public static int getNOC(ClassBean cb, Collection<ClassBean> classes) {
         int noc = 0;
         for (ClassBean c : classes) {
             if (c.getSuperclass() != null && c.getSuperclass().equals(cb.getName())) {
@@ -234,15 +210,15 @@ public class ClassMetrics {
      * @param classes
      * @return
      */
-    public static int getNAO(ClassBean cb, List<ClassBean> classes) {
-        ClassBean superClass = getSuperclass(cb, classes);
+    public static int getNAO(ClassBean cb, Collection<ClassBean> classes) {
+        ClassBean superClass = getSuperclassBean(cb, classes);
         if (superClass == null) {
             return 0;
         }
         int noa = 0;
         for (MethodBean method : cb.getMethods()) {
-            if (!superClass.getMethods().contains(method)) {
-                noa++;
+            if (matchSuperMethod(method, superClass) == null) {
+                noa++;;
             }
         }
         return noa;
@@ -255,15 +231,15 @@ public class ClassMetrics {
      * @param classes
      * @return
      */
-    public static int getNOO(ClassBean cb, List<ClassBean> classes) {
-        ClassBean superClass = getSuperclass(cb, classes);
+    public static int getNOO(ClassBean cb, Collection<ClassBean> classes) {
+        ClassBean superClass = getSuperclassBean(cb, classes);
         if (superClass == null) {
             return 0;
         }
         int noo = 0;
         for (MethodBean method : cb.getMethods()) {
-            if (superClass.getMethods().contains(method)) {
-                noo++;
+            if (matchSuperMethod(method, superClass) != null) {
+                noo++;;
             }
         }
         return noo;
@@ -314,7 +290,51 @@ public class ClassMetrics {
         }
     }
 
-    //TODO Implement LCC, TCC, NOPA (private), LCOM5, Halsteads metrics, MI
+    //TODO Implement LCC, TCC, LCOM5, Halsteads metrics
+
+    /**
+     * Computes part of Message Passing Coupling (MPC), that is the number of method calls from a class to another.
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
+    private static int getOneSideMPC(ClassBean c1, ClassBean c2) {
+        int mpc = 0;
+        for (MethodBean method : c1.getMethods()) {
+            for (MethodBean calledMethod : method.getMethodCalls()) {
+                for (MethodBean methodC2 : c2.getMethods()) {
+                    if (calledMethod.getName().equalsIgnoreCase(methodC2.getName())) {
+                        mpc++;
+                    }
+                }
+            }
+        }
+        return mpc;
+    }
+
+    /**
+     * Compute total number of outgoing method calls (outgoing messages)
+     *
+     * @param cb
+     * @return
+     */
+    private static int getNumTotalMethodCalls(ClassBean cb) {
+        return cb.getMethods().stream()
+                .map(m -> m.getMethodCalls().size())
+                .reduce(0, Integer::sum);
+    }
+
+    private static ClassBean getSuperclassBean(ClassBean cb, Collection<ClassBean> classes) {
+        return classes.stream()
+                .filter(c -> c.getName().equals(cb.getSuperclass()))
+                .findFirst().orElse(null);
+    }
+
+    private static MethodBean matchSuperMethod(MethodBean method, ClassBean superClass) {
+        List<MethodBean> sameNameMethods = superClass.getMethods().stream().filter(m -> m.equals(method)).collect(Collectors.toList());
+        return sameNameMethods.stream().filter(m -> m.getParameters().size() == method.getParameters().size()).findFirst().orElse(null);
+    }
 
     private static boolean shareAnInstanceVariable(MethodBean m1, MethodBean m2) {
         for (InstanceVariableBean i : m1.getUsedInstanceVariables()) {

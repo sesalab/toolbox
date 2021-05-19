@@ -1,5 +1,7 @@
 package org.computemetrics.beans;
 
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,6 +17,7 @@ public class ClassBean {
     private String belongingPackage;
     private String pathToClass;
     private int entityClassUsage;
+    private TypeDeclaration typeDeclaration;
 
     public int getLOC() {
         return LOC;
@@ -25,10 +28,9 @@ public class ClassBean {
     }
 
     public ClassBean() {
-        name = null;
         instanceVariables = new ArrayList<>();
         methods = new ArrayList<>();
-        setImports(new ArrayList<>());
+        imports = new ArrayList<>();
     }
 
     public String getName() {
@@ -128,6 +130,14 @@ public class ClassBean {
 
     public void setNumberOfGetterAndSetter(int entityClassUsage) {
         this.entityClassUsage = entityClassUsage;
+    }
+
+    public TypeDeclaration getTypeDeclaration() {
+        return typeDeclaration;
+    }
+
+    public void setTypeDeclaration(TypeDeclaration typeDeclaration) {
+        this.typeDeclaration = typeDeclaration;
     }
 
     public boolean equals(Object arg) {

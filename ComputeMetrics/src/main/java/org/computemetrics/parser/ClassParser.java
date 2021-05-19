@@ -17,29 +17,29 @@ import java.util.stream.Collectors;
 
 public class ClassParser {
 
-    public static ClassBean parse(TypeDeclaration pClassNode, String belongingPackage, List<String> imports) {
+    public static ClassBean parse(TypeDeclaration typeDeclaration, String belongingPackage, List<String> imports) {
         ClassBean classBean = new ClassBean();
-        classBean.setName(pClassNode.getName().toString());
+        classBean.setName(typeDeclaration.getName().toString());
         classBean.setImports(imports);
         classBean.setBelongingPackage(belongingPackage);
-        classBean.setTextContent(pClassNode.toString());
-        if (pClassNode.getSuperclassType() != null)
-            classBean.setSuperclass(pClassNode.getSuperclassType().toString());
+        classBean.setTextContent(typeDeclaration.toString());
+        if (typeDeclaration.getSuperclassType() != null)
+            classBean.setSuperclass(typeDeclaration.getSuperclassType().toString());
         else
             classBean.setSuperclass(null);
 
-        String[] lines = Pattern.compile("\r\n|\r|\n").split(pClassNode.toString());
+        String[] lines = Pattern.compile("\r\n|\r|\n").split(typeDeclaration.toString());
         classBean.setLOC(lines.length);
 
         Collection<FieldDeclaration> instanceVariableNodes = new ArrayList<>();
-        pClassNode.accept(new InstanceVariableVisitor(instanceVariableNodes));
+        typeDeclaration.accept(new InstanceVariableVisitor(instanceVariableNodes));
         Collection<InstanceVariableBean> instanceVariables = instanceVariableNodes.stream()
                 .map(InstanceVariableParser::parse)
                 .collect(Collectors.toList());
         classBean.setInstanceVariables(instanceVariables);
 
         Collection<MethodDeclaration> methods = new ArrayList<>();
-        pClassNode.accept(new MethodVisitor(methods));
+        typeDeclaration.accept(new MethodVisitor(methods));
 
         Collection<String> getMethods = new ArrayList<>();
         Collection<String> setMethods = new ArrayList<>();
@@ -76,6 +76,7 @@ public class ClassParser {
             classMethod.setMethodCalls(definedInvocations);
         }
         classBean.setMethods(methodBeans);
+        classBean.setTypeDeclaration(typeDeclaration);
         return classBean;
     }
 

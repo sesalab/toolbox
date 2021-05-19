@@ -19,11 +19,16 @@ public class ComputeMetrics {
     private static final String LOC = "LOC";
     private static final String SLOC = "SLOC";
     private static final String NOA = "NOA";
-    private static final String NOPA = "NOPA";
+    private static final String NOPubA = "NOPubA";
+    private static final String NOPrivA = "NOPrivA";
     private static final String NOM = "NOM";
     private static final String WMC = "WMC";
     private static final String CBO = "CBO";
     private static final String RFC = "RFC";
+    private static final String DIT = "DIT";
+    private static final String NOC = "NOC";
+    private static final String NAO = "NAO";
+    private static final String NOO = "NOO";
     private static final String LCOM1 = "LCOM1";
     private static final String LCOM2 = "LCOM2";
 
@@ -33,7 +38,6 @@ public class ComputeMetrics {
 
     public Output run() throws IOException {
         // Parse all .java files in input.getDirectory()
-        // TODO Parse all only if certain metrics are used (DIT etc)
         Collection<File> javaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
         Collection<ClassBean> classBeans = new HashSet<>();
         for (File javaFile : javaFiles) {
@@ -72,8 +76,11 @@ public class ComputeMetrics {
                 case NOA:
                     metrics.put(NOA, (double) ClassMetrics.getNOA(classBean));
                     break;
-                case NOPA:
-                    metrics.put(NOPA, (double) ClassMetrics.getNOPA(classBean));
+                case NOPubA:
+                    metrics.put(NOPubA, (double) ClassMetrics.getNOPubA(classBean));
+                    break;
+                case NOPrivA:
+                    metrics.put(NOPrivA, (double) ClassMetrics.getNOPrivA(classBean));
                     break;
                 case NOM:
                     metrics.put(NOM, (double) ClassMetrics.getNOM(classBean));
@@ -86,6 +93,18 @@ public class ComputeMetrics {
                     break;
                 case RFC:
                     metrics.put(RFC, (double) ClassMetrics.getRFC(classBean));
+                    break;
+                case DIT:
+                    metrics.put(DIT, (double) ClassMetrics.getDIT(classBean, classBeans));
+                    break;
+                case NOC:
+                    metrics.put(NOC, (double) ClassMetrics.getNOC(classBean, classBeans));
+                    break;
+                case NAO:
+                    metrics.put(NAO, (double) ClassMetrics.getNAO(classBean, classBeans));
+                    break;
+                case NOO:
+                    metrics.put(NOO, (double) ClassMetrics.getNOO(classBean, classBeans));
                     break;
                 case LCOM1:
                     metrics.put(LCOM1, (double) ClassMetrics.getLCOM1(classBean));

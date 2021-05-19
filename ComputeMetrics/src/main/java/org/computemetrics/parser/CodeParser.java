@@ -5,6 +5,10 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 /**
  * This class contains the methods necessary for the parser;
  *
@@ -54,6 +58,18 @@ public class CodeParser {
         parser.setResolveBindings(true); // we need bindings later on
         return (CompilationUnit) parser.createAST(null);
     }
+
+    /*
+    public CompilationUnit createParser(String pClass, Collection<File> javaFiles) {
+        parser = ASTParser.newParser(AST.JLS8);
+        parser.setKind(ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(pClass.toCharArray()); // set source
+        String[] sourcepathEntries = javaFiles.stream().map(File::getAbsolutePath).toArray(String[]::new);
+        parser.setEnvironment(new String[]{"/tmp/com.google.android.divideandconquer/src/com/google/android/divideandconquer"}, sourcepathEntries, null, true);
+        parser.setResolveBindings(true); // we need bindings later on
+        return (CompilationUnit) parser.createAST(null);
+    }
+     */
 
     public CompilationUnit getCompilationUnit() {
         return this.unit;

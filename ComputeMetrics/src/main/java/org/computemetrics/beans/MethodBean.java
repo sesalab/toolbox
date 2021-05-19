@@ -1,5 +1,6 @@
 package org.computemetrics.beans;
 
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 
@@ -17,6 +18,7 @@ public class MethodBean {
     private Collection<MethodBean> methodCalls;
     private Type returnType;
     private List<SingleVariableDeclaration> parameters;
+    private MethodDeclaration methodDeclaration;
 
     public MethodBean() {
         usedInstanceVariables = new ArrayList<>();
@@ -125,6 +127,14 @@ public class MethodBean {
 
     public void setVisibility(int visibility) {
         this.visibility = visibility;
+    }
+
+    public MethodDeclaration getMethodDeclaration() {
+        return methodDeclaration;
+    }
+
+    public void setMethodDeclaration(MethodDeclaration methodDeclaration) {
+        this.methodDeclaration = methodDeclaration;
     }
 
     public boolean equals(Object arg) {

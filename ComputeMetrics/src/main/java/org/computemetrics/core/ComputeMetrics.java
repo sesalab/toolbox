@@ -12,7 +12,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ComputeMetrics {
     private final Input input;
@@ -38,7 +43,7 @@ public class ComputeMetrics {
         this.input = input;
     }
 
-    public Output run() throws IOException {
+    public List<Output> run() throws IOException {
         // Parse all .java files in input.getDirectory()
         Collection<File> javaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
         Collection<ClassBean> classBeans = new HashSet<>();
@@ -59,13 +64,27 @@ public class ComputeMetrics {
             }
         }
 
-        Path targetFilePath = Paths.get(input.getDirectory(), input.getFile()).toAbsolutePath();
-        ClassBean classBean = classBeans.stream()
-                .filter(cb -> cb.getPathToClass().equals(targetFilePath.toString()))
-                .findFirst().orElse(null);
-        if (classBean == null) {
-            throw new RuntimeException("Target file not found: aborting...");
+        List<Output> outputs = new ArrayList<>();
+        if (input.getFile() != null) {
+            Path targetFilePath = Paths.get(input.getDirectory(), input.getFile()).toAbsolutePath();
+            ClassBean classBean = classBeans.stream()
+                    .filter(cb -> cb.getPathToClass().equals(targetFilePath.toString()))
+                    .findFirst().orElse(null);
+            if (classBean == null) {
+                throw new RuntimeException("Target file not found: aborting...");
+            }
+            Map<String, Double> metrics = computeMetrics(classBean, classBeans);
+            outputs.add(new Output(input.getDirectory(), input.getFile(), metrics));
+        } else {
+            for (ClassBean classBean : classBeans) {
+                Map<String, Double> metrics = computeMetrics(classBean, classBeans);
+                outputs.add(new Output(input.getDirectory(), input.getFile(), metrics));
+            }
         }
+        return outputs;
+    }
+
+    private Map<String, Double> computeMetrics(ClassBean classBean, Collection<ClassBean> classBeans) {
         Map<String, Double> metrics = new LinkedHashMap<>();
         for (String metric : input.getMetrics()) {
             switch (metric) {

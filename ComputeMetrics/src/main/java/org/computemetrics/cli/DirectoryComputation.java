@@ -14,10 +14,12 @@ import org.apache.commons.cli.ParseException;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-public class SingleFileComputation {
+public class DirectoryComputation {
     public static final String DIR = "dir";
     public static final String FILE = "file";
     public static final String METRICS = "metrics";
@@ -25,7 +27,7 @@ public class SingleFileComputation {
     public static void main(String[] args) {
         Options options = new Options();
         options.addOption(new Option("" + DIR.charAt(0), DIR, true, "Base directory where looking for files to analyze"));
-        options.addOption(new Option("" + FILE.charAt(0), FILE, true, "Source code file to analyze"));
+        options.addOption(new Option("" + FILE.charAt(0), FILE, true, "(Optional) Source code file to analyze"));
         options.addOption(new Option("" + METRICS.charAt(0), METRICS, true, "Source code file to analyze"));
 
         CommandLineParser parser = new DefaultParser();
@@ -33,9 +35,6 @@ public class SingleFileComputation {
             CommandLine cl = parser.parse(options, args);
             if (!cl.hasOption(DIR)) {
                 exitError("Base directory not specified. Exiting.");
-            }
-            if (!cl.hasOption(FILE)) {
-                exitError("File not specified. Exiting.");
             }
             if (!cl.hasOption(METRICS)) {
                 exitError("No metric specified. Exiting.");
@@ -45,24 +44,29 @@ public class SingleFileComputation {
             String metrics = cl.getOptionValue(METRICS);
 
             ComputeMetrics computeMetrics = new ComputeMetrics(new Input(dir, file, metrics.split(",")));
-            Output output = computeMetrics.run();
-            Map<String, Object> content = new LinkedHashMap<>();
-            content.put(DIR, output.getDirectory());
-            content.put(FILE, output.getFile());
-            content.putAll(output.getMetrics());
-            //content.put("metrics", output.getMetrics());
-
+            List<Output> outputs = computeMetrics.run();
+            List<Map<String, Object>> content = new ArrayList<>();
+            for (Output output : outputs) {
+                Map<String, Object> contentLine = new LinkedHashMap<>();
+                contentLine.put(DIR, output.getDirectory());
+                contentLine.put(FILE, output.getFile());
+                contentLine.putAll(output.getMetrics());
+                content.add(contentLine);
+            }
             Gson gson = new Gson();
-            Type gsonType = new TypeToken<Map<String, Object>>() {
+            Type gsonType = new TypeToken<List<Map<String, Object>>>() {
             }.getType();
             String gsonString = gson.toJson(content, gsonType);
             System.out.println(gsonString);
         } catch (ParseException e) {
+            e.printStackTrace();
             exitError("Invalid options. Exiting.");
         } catch (IOException e) {
+            e.printStackTrace();
             exitError("File not found. Exiting.");
         } catch (RuntimeException e) {
-            exitError(e.getMessage());
+            e.printStackTrace();
+            exitError("Unexpected error. Exiting.");
         }
     }
 

@@ -38,7 +38,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.computemetrics.cli.SingleFileComputation</mainClass>
+                                    <mainClass>org.computemetrics.cli.DirectoryComputation</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

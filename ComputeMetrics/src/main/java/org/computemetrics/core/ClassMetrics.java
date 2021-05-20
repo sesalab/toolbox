@@ -335,7 +335,7 @@ public class ClassMetrics {
     public static double getLCOM5(ClassBean cb) {
         int numberOfAttributes = cb.getInstanceVariables().size();
         int numberPossibleLinks = cb.getMethods().size() * numberOfAttributes;
-        if (numberPossibleLinks == 0) {
+        if (numberOfAttributes - numberPossibleLinks == 0) {
             return 0;
         }
         int numberActualLinks = 0;

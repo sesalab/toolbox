@@ -83,7 +83,8 @@ public class ComputeMetrics {
         } else {
             for (ClassBean classBean : classBeans) {
                 Map<String, Double> metrics = computeMetrics(classBean, classBeans);
-                outputs.add(new Output(input.getDirectory(), input.getFile(), metrics));
+                Path filePath = Paths.get(input.getDirectory()).relativize(Paths.get(classBean.getPathToClass()));
+                outputs.add(new Output(input.getDirectory(), filePath.toString(), metrics));
             }
         }
         return outputs;

@@ -142,8 +142,11 @@ public class ClassMetrics {
      * @return
      */
     public static double getHV(ClassBean cb) {
-        int N = cb.getNumberOfOperands() + cb.getNumberOfOperators();
         int n = cb.getNumberOfDistinctOperands() + cb.getNumberOfDistinctOperators();
+        if (n == 0) {
+            return 0;
+        }
+        int N = cb.getNumberOfOperands() + cb.getNumberOfOperators();
         return N * (Math.log(n) / Math.log(2));
     }
 
@@ -171,7 +174,12 @@ public class ClassMetrics {
      * @return
      */
     public static double getMI(ClassBean cb) {
-        return 171 - 5.2 * Math.log(getHV(cb)) - 0.23 * getWMC(cb) - 16.2 * Math.log(getSLOC(cb));
+        double hv = getHV(cb);
+        double term1 = hv != 0 ? 5.2 * Math.log(hv) : 0;
+        double term2 = 0.23 * getWMC(cb);
+        int sloc = getSLOC(cb);
+        double term3 = sloc != 0 ? 16.2 * Math.log(sloc) : 0;
+        return 171 - term1 - term2 - term3;
     }
 
     /**

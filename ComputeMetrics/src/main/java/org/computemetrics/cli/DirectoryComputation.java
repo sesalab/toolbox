@@ -56,7 +56,6 @@ public class DirectoryComputation {
             Gson gson = new Gson();
             Type gsonType = new TypeToken<List<Map<String, Object>>>() {
             }.getType();
-            System.out.println(content);
             String gsonString = gson.toJson(content, gsonType);
             System.out.println(gsonString);
         } catch (ParseException e) {

@@ -5,15 +5,6 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-/**
- * This class contains the methods necessary for the parser;
- *
- * @author Fabio Palomba;
- */
 
 public class CodeParser {
     private char[] charClass;

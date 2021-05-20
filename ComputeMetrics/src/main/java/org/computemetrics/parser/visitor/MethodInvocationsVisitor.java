@@ -7,11 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * This class allows to visit the MethodInvocation node (i.e.: example.getX()) of the AST representing the Class;
- *
- * @author Fabio Palomba;
- */
 public class MethodInvocationsVisitor extends ASTVisitor {
     private List<MethodInvocation> methods = new ArrayList<MethodInvocation>();
 

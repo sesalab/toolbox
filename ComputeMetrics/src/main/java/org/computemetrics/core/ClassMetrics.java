@@ -137,6 +137,44 @@ public class ClassMetrics {
     }
 
     /**
+     * Computes Halstead's Volume
+     *
+     * @return
+     */
+    public static double getHV(ClassBean cb) {
+        int N = cb.getNumberOfOperands() + cb.getNumberOfOperators();
+        int n = cb.getNumberOfDistinctOperands() + cb.getNumberOfDistinctOperators();
+        return N * (Math.log(n) / Math.log(2));
+    }
+
+    /**
+     * Computes Halstead's Difficulty
+     *
+     * @return
+     */
+    public static double getHD(ClassBean cb) {
+        return ((float) cb.getNumberOfDistinctOperators() / 2) * (cb.getNumberOfOperands() * cb.getNumberOfDistinctOperands());
+    }
+
+    /**
+     * Computes Halstead's Effort
+     *
+     * @return
+     */
+    public static double getHE(ClassBean cb) {
+        return getHV(cb) * getHD(cb);
+    }
+
+    /**
+     * Computes Maintainability Index (original)
+     *
+     * @return
+     */
+    public static double getMI(ClassBean cb) {
+        return 171 - 5.2 * Math.log(getHV(cb)) - 0.23 * getWMC(cb) - 16.2 * Math.log(getSLOC(cb));
+    }
+
+    /**
      * Computes Message Passing Coupling (MPC) between two classes.
      *
      * @param c1
@@ -306,8 +344,6 @@ public class ClassMetrics {
         }
         return (float) (numberActualLinks - numberPossibleLinks) / (numberOfAttributes - numberPossibleLinks);
     }
-
-    //TODO Implement Halsteads metrics
 
     public static double getTCC(ClassBean cb) {
         List<MethodBean> visibleMethods = cb.getMethods().stream().filter(m -> m.getVisibility() != 0).collect(Collectors.toList());

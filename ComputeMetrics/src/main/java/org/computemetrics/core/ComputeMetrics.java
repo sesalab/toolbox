@@ -29,6 +29,10 @@ public class ComputeMetrics {
     private static final String NOM = "NOM";
     private static final String WMC = "WMC";
     private static final String CBO = "CBO";
+    private static final String HV = "HV";
+    private static final String HD = "HD";
+    private static final String HE = "HE";
+    private static final String MI = "MI";
     private static final String RFC = "RFC";
     private static final String DIT = "DIT";
     private static final String NOC = "NOC";
@@ -112,6 +116,18 @@ public class ComputeMetrics {
                     break;
                 case CBO:
                     metrics.put(CBO, (double) ClassMetrics.getCBO(classBean));
+                    break;
+                case HV:
+                    metrics.put(HV, ClassMetrics.getHV(classBean));
+                    break;
+                case HD:
+                    metrics.put(HD, ClassMetrics.getHD(classBean));
+                    break;
+                case HE:
+                    metrics.put(HE, ClassMetrics.getHE(classBean));
+                    break;
+                case MI:
+                    metrics.put(MI, ClassMetrics.getMI(classBean));
                     break;
                 case RFC:
                     metrics.put(RFC, (double) ClassMetrics.getRFC(classBean));

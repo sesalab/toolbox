@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 public class ClassBean {
 
@@ -17,6 +18,8 @@ public class ClassBean {
     private String belongingPackage;
     private String pathToClass;
     private int entityClassUsage;
+    private Map<String, Integer> operands;
+    private Map<String, Integer> operators;
     private TypeDeclaration typeDeclaration;
 
     public int getLOC() {
@@ -130,6 +133,38 @@ public class ClassBean {
 
     public void setNumberOfGetterAndSetter(int entityClassUsage) {
         this.entityClassUsage = entityClassUsage;
+    }
+
+    public Map<String, Integer> getOperands() {
+        return operands;
+    }
+
+    public void setOperands(Map<String, Integer> operands) {
+        this.operands = operands;
+    }
+
+    public Map<String, Integer> getOperators() {
+        return operators;
+    }
+
+    public void setOperators(Map<String, Integer> operators) {
+        this.operators = operators;
+    }
+
+    public int getNumberOfOperands() {
+        return operands.values().stream().reduce(Integer::sum).orElse(0);
+    }
+
+    public int getNumberOfDistinctOperands() {
+        return operands.keySet().size();
+    }
+
+    public int getNumberOfOperators() {
+        return operators.values().stream().reduce(Integer::sum).orElse(0);
+    }
+
+    public int getNumberOfDistinctOperators() {
+        return operators.keySet().size();
     }
 
     public TypeDeclaration getTypeDeclaration() {

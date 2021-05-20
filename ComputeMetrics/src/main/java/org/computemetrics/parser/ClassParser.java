@@ -5,6 +5,8 @@ import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
 import org.computemetrics.parser.visitor.InstanceVariableVisitor;
 import org.computemetrics.parser.visitor.MethodVisitor;
+import org.computemetrics.parser.visitor.OperandsVisitor;
+import org.computemetrics.parser.visitor.OperatorsVisitor;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -80,6 +82,14 @@ public class ClassParser {
             outerMethod.setMethodCalls(fixedMethodCalls);
         }
         classBean.setMethods(methodBeans);
+
+        OperandsVisitor operandsVisitor = new OperandsVisitor();
+        OperatorsVisitor operatorsVisitor = new OperatorsVisitor();
+        typeDeclaration.accept(operandsVisitor);
+        typeDeclaration.accept(operatorsVisitor);
+        classBean.setOperands(operandsVisitor.getOperands());
+        classBean.setOperators(operatorsVisitor.getOperators());
+
         classBean.setTypeDeclaration(typeDeclaration);
         return classBean;
     }

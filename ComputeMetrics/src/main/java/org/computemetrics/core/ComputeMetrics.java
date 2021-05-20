@@ -36,6 +36,7 @@ public class ComputeMetrics {
     private static final String NOO = "NOO";
     private static final String LCOM1 = "LCOM1";
     private static final String LCOM2 = "LCOM2";
+    private static final String LCOM5 = "LCOM5";
     private static final String TCC = "TCC";
     private static final String LCC = "LCC";
 
@@ -132,6 +133,9 @@ public class ComputeMetrics {
                     break;
                 case LCOM2:
                     metrics.put(LCOM2, (double) ClassMetrics.getLCOM2(classBean));
+                    break;
+                case LCOM5:
+                    metrics.put(LCOM5, ClassMetrics.getLCOM5(classBean));
                     break;
                 case TCC:
                     metrics.put(TCC, ClassMetrics.getTCC(classBean));

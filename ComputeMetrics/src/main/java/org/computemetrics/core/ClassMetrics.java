@@ -3,7 +3,6 @@ package org.computemetrics.core;
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -248,7 +247,7 @@ public class ClassMetrics {
     }
 
     /**
-     * Computes Lack of Cohesion of Method version 1 (Chidamber and Kemerer)
+     * Computes Lack of Cohesion of Method sversion 1 (Chidamber and Kemerer)
      *
      * @param cb
      * @return
@@ -256,9 +255,11 @@ public class ClassMetrics {
     public static int getLCOM1(ClassBean cb) {
         int notShare = 0;
         List<MethodBean> methods = (List<MethodBean>) cb.getMethods();
-        for (int i = 0; i < methods.size(); i++) {
+        for (int i = 0; i < methods.size() - 1; i++) {
             for (int j = i + 1; j < methods.size(); j++) {
-                if (!shareAnInstanceVariable(methods.get(i), methods.get(j))) {
+                MethodBean methodA = methods.get(i);
+                MethodBean methodB = methods.get(j);
+                if (!shareAnInstanceVariable(methodA, methodB)) {
                     notShare++;
                 }
             }
@@ -267,7 +268,7 @@ public class ClassMetrics {
     }
 
     /**
-     * Computes Lack of Cohesion of Method version 2
+     * Computes Lack of Cohesion of Methods version 2 (Chidamber and Kemerer)
      *
      * @param cb
      * @return
@@ -276,23 +277,37 @@ public class ClassMetrics {
         int share = 0;
         int notShare = 0;
         List<MethodBean> methods = (List<MethodBean>) cb.getMethods();
-        for (int i = 0; i < methods.size(); i++) {
+        for (int i = 0; i < methods.size() - 1; i++) {
             for (int j = i + 1; j < methods.size(); j++) {
-                if (shareAnInstanceVariable(methods.get(i), methods.get(j))) {
+                MethodBean methodA = methods.get(i);
+                MethodBean methodB = methods.get(j);
+                if (shareAnInstanceVariable(methodA, methodB)) {
                     share++;
                 } else {
                     notShare++;
                 }
             }
         }
-        if (share > notShare) {
-            return 0;
-        } else {
-            return (notShare - share);
+        if (notShare > share) {
+            return notShare - share;
         }
+        return 0;
     }
 
-    //TODO Implement LCOM5, Halsteads metrics
+    public static double getLCOM5(ClassBean cb) {
+        int numberOfAttributes = cb.getInstanceVariables().size();
+        int numberPossibleLinks = cb.getMethods().size() * numberOfAttributes;
+        if (numberPossibleLinks == 0) {
+            return 0;
+        }
+        int numberActualLinks = 0;
+        for (MethodBean method : cb.getMethods()) {
+            numberActualLinks += method.getUsedInstanceVariables().size();
+        }
+        return (float) (numberActualLinks - numberPossibleLinks) / (numberOfAttributes - numberPossibleLinks);
+    }
+
+    //TODO Implement Halsteads metrics
 
     public static double getTCC(ClassBean cb) {
         List<MethodBean> visibleMethods = cb.getMethods().stream().filter(m -> m.getVisibility() != 0).collect(Collectors.toList());

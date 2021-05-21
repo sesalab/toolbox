@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DirectoryComputation {
+    public static final String PROJECT = "project";
+    public static final String CLASS = "class";
     public static final String DIR = "dir";
     public static final String FILE = "file";
     public static final String METRICS = "metrics";
@@ -48,8 +50,10 @@ public class DirectoryComputation {
             List<Map<String, Object>> content = new ArrayList<>();
             for (Output output : outputs) {
                 Map<String, Object> contentLine = new LinkedHashMap<>();
-                contentLine.put(DIR, output.getDirectory());
-                contentLine.put(FILE, output.getFile());
+                contentLine.put(PROJECT, output.getProject());
+                contentLine.put(CLASS, output.getClazz());
+                // contentLine.put(DIR, output.getDirectory());
+                // contentLine.put(FILE, output.getFile());
                 contentLine.putAll(output.getMetrics());
                 content.add(contentLine);
             }

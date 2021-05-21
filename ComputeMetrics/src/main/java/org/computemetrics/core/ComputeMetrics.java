@@ -64,28 +64,29 @@ public class ComputeMetrics {
                     imports.add(anImport.toString());
                 }
                 ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage().getName().getFullyQualifiedName(), imports);
-                classBean.setPathToClass(filePath.toAbsolutePath().toString());
+                classBean.setPathToFile(filePath.toAbsolutePath());
                 classBeans.add(classBean);
             }
         }
 
         List<Output> outputs = new ArrayList<>();
+        Path pathToDirectory = Paths.get(input.getDirectory());
+        String project = pathToDirectory.getFileName().toString();
         if (input.getFile() != null) {
-            Path targetFilePath = Paths.get(input.getDirectory(), input.getFile()).toAbsolutePath();
             ClassBean classBean = classBeans.stream()
-                    .filter(cb -> cb.getPathToClass().equals(targetFilePath.toString()))
+                    .filter(cb -> cb.getPathToFile().equals(pathToDirectory.resolve(Paths.get(input.getFile()))))
                     .findFirst().orElse(null);
             if (classBean == null) {
                 throw new RuntimeException("Target file not found: aborting...");
             }
+            classBeans.clear();
+            classBeans.add(classBean);
+        }
+        for (ClassBean classBean : classBeans) {
+            String classFQN = classBean.getBelongingPackage() + "." + classBean.getName();
             Map<String, Double> metrics = computeMetrics(classBean, classBeans);
-            outputs.add(new Output(input.getDirectory(), input.getFile(), metrics));
-        } else {
-            for (ClassBean classBean : classBeans) {
-                Map<String, Double> metrics = computeMetrics(classBean, classBeans);
-                Path filePath = Paths.get(input.getDirectory()).relativize(Paths.get(classBean.getPathToClass()));
-                outputs.add(new Output(input.getDirectory(), filePath.toString(), metrics));
-            }
+            Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
+            outputs.add(new Output(input.getDirectory(), filePath.toString(), project, classFQN, metrics));
         }
         return outputs;
     }

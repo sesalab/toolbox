@@ -19,7 +19,7 @@ public class CKMetrics {
 
     public static int getLOC(ClassBean cb) {
         try {
-            String content = FileUtility.readFile(cb.getPathToClass());
+            String content = FileUtility.readFile(cb.getPathToFile().toString());
             return content.split("\r\n|\r|\n").length;
         } catch (IOException e) {
             e.printStackTrace();

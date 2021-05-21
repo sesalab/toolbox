@@ -2,6 +2,7 @@ package org.computemetrics.beans;
 
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class ClassBean {
     private int LOC;
     private String superclass;
     private String belongingPackage;
-    private String pathToClass;
+    private Path pathToFile;
     private int entityClassUsage;
     private Map<String, Integer> operands;
     private Map<String, Integer> operators;
@@ -123,12 +124,12 @@ public class ClassBean {
         return entityClassUsage;
     }
 
-    public String getPathToClass() {
-        return pathToClass;
+    public Path getPathToFile() {
+        return pathToFile;
     }
 
-    public void setPathToClass(String pathToClass) {
-        this.pathToClass = pathToClass;
+    public void setPathToFile(Path pathToFile) {
+        this.pathToFile = pathToFile;
     }
 
     public void setNumberOfGetterAndSetter(int entityClassUsage) {

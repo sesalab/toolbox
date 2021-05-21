@@ -63,9 +63,13 @@ public class ComputeMetrics {
                 for (Object anImport : fileCU.imports()) {
                     imports.add(anImport.toString());
                 }
-                ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage().getName().getFullyQualifiedName(), imports);
-                classBean.setPathToFile(filePath.toAbsolutePath());
-                classBeans.add(classBean);
+                if (fileCU.getPackage() == null) {
+                    System.err.println("Could not parse file: " + filePath);
+                } else {
+                    ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage().getName().getFullyQualifiedName(), imports);
+                    classBean.setPathToFile(filePath.toAbsolutePath());
+                    classBeans.add(classBean);
+                }
             }
         }
 
@@ -86,7 +90,7 @@ public class ComputeMetrics {
             String classFQN = classBean.getBelongingPackage() + "." + classBean.getName();
             Map<String, Double> metrics = computeMetrics(classBean, classBeans);
             Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
-            outputs.add(new Output(input.getDirectory(), filePath.toString(), project, classFQN, metrics));
+            outputs.add(new Output(project, classFQN, input.getDirectory(), filePath.toString(), metrics));
         }
         return outputs;
     }

@@ -3,10 +3,8 @@ package org.computemetrics.parser;
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
-import org.computemetrics.parser.visitor.InstanceVariableVisitor;
-import org.computemetrics.parser.visitor.MethodVisitor;
-import org.computemetrics.parser.visitor.OperandsVisitor;
-import org.computemetrics.parser.visitor.OperatorsVisitor;
+import org.computemetrics.parser.visitor.*;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -89,6 +87,36 @@ public class ClassParser {
         typeDeclaration.accept(operatorsVisitor);
         classBean.setOperands(operandsVisitor.getOperands());
         classBean.setOperators(operatorsVisitor.getOperators());
+
+        AssertVisitor assertVisitor = new AssertVisitor();
+        IfVisitor ifVisitor = new IfVisitor();
+        SwitchCaseVisitor switchCaseVisitor = new SwitchCaseVisitor();
+        WhileVisitor whileVisitor = new WhileVisitor();
+        ForVisitor forVisitor = new ForVisitor();
+        ConditionalExpressionVisitor conditionalExpressionVisitor = new ConditionalExpressionVisitor();
+        typeDeclaration.accept(assertVisitor);
+        typeDeclaration.accept(ifVisitor);
+        typeDeclaration.accept(switchCaseVisitor);
+        typeDeclaration.accept(whileVisitor);
+        typeDeclaration.accept(forVisitor);
+        typeDeclaration.accept(conditionalExpressionVisitor);
+        classBean.setAsserts(assertVisitor.getAsserts());
+        classBean.setIfs(ifVisitor.getIfs());
+        classBean.setSwitchCases(switchCaseVisitor.getCases());
+        classBean.setWhiles(whileVisitor.getWhiles());
+        classBean.setFors(forVisitor.getFors());
+        classBean.setConditionals(conditionalExpressionVisitor.getConditionals());
+
+        MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
+        ConstructorInvocationVisitor constructorInvocationVisitor = new ConstructorInvocationVisitor();
+        typeDeclaration.accept(methodInvocationVisitor);
+        typeDeclaration.accept(constructorInvocationVisitor);
+        classBean.setMethodCalls(methodInvocationVisitor.getCalls());
+        classBean.setConstructorCalls(constructorInvocationVisitor.getCalls());
+
+        AssignmentVisitor assignmentVisitor = new AssignmentVisitor();
+        typeDeclaration.accept(assignmentVisitor);
+        classBean.setAssignments(assignmentVisitor.getAssignments());
 
         classBean.setTypeDeclaration(typeDeclaration);
         return classBean;

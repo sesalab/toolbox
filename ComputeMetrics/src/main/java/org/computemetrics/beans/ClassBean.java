@@ -1,10 +1,11 @@
 package org.computemetrics.beans;
 
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class ClassBean {
@@ -21,6 +22,15 @@ public class ClassBean {
     private int entityClassUsage;
     private Map<String, Integer> operands;
     private Map<String, Integer> operators;
+    private List<AssertStatement> asserts;
+    private List<IfStatement> ifs;
+    private List<SwitchCase> switchCases;
+    private List<WhileStatement> whiles;
+    private List<ForStatement> fors;
+    private List<ConditionalExpression> conditionals;
+    private List<MethodInvocation> methodCalls;
+    private List<ConstructorInvocation> constructorCalls;
+    private List<Assignment> assignments;
     private TypeDeclaration typeDeclaration;
 
     public int getLOC() {
@@ -166,6 +176,78 @@ public class ClassBean {
 
     public int getNumberOfDistinctOperators() {
         return operators.keySet().size();
+    }
+
+    public List<AssertStatement> getAsserts() {
+        return asserts;
+    }
+
+    public void setAsserts(List<AssertStatement> asserts) {
+        this.asserts = asserts;
+    }
+
+    public List<IfStatement> getIfs() {
+        return ifs;
+    }
+
+    public void setIfs(List<IfStatement> ifs) {
+        this.ifs = ifs;
+    }
+
+    public List<SwitchCase> getSwitchCases() {
+        return switchCases;
+    }
+
+    public void setSwitchCases(List<SwitchCase> switchCases) {
+        this.switchCases = switchCases;
+    }
+
+    public List<WhileStatement> getWhiles() {
+        return whiles;
+    }
+
+    public void setWhiles(List<WhileStatement> whiles) {
+        this.whiles = whiles;
+    }
+
+    public List<ForStatement> getFors() {
+        return fors;
+    }
+
+    public void setFors(List<ForStatement> fors) {
+        this.fors = fors;
+    }
+
+    public List<ConditionalExpression> getConditionals() {
+        return conditionals;
+    }
+
+    public void setConditionals(List<ConditionalExpression> conditionals) {
+        this.conditionals = conditionals;
+    }
+
+    public List<MethodInvocation> getMethodCalls() {
+        return methodCalls;
+    }
+
+    public void setMethodCalls(List<MethodInvocation> methodCalls) {
+        this.methodCalls = methodCalls;
+    }
+
+    public List<ConstructorInvocation> getConstructorCalls() {
+        return constructorCalls;
+    }
+
+    public void setConstructorCalls(List<ConstructorInvocation> constructorCalls) {
+        this.constructorCalls = constructorCalls;
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     public TypeDeclaration getTypeDeclaration() {

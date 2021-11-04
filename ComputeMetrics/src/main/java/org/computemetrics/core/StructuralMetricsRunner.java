@@ -14,13 +14,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ComputeMetrics {
-    private final Input input;
+public class StructuralMetricsRunner extends MetricsRunner {
+    private final StructuralInput input;
     private static final String LOC = "LOC";
     private static final String SLOC = "SLOC";
     private static final String NOA = "NOA";
@@ -44,33 +45,19 @@ public class ComputeMetrics {
     private static final String TCC = "TCC";
     private static final String LCC = "LCC";
 
-    public ComputeMetrics(Input input) {
+    public StructuralMetricsRunner(StructuralInput input) {
         this.input = input;
     }
 
-    public List<Output> run() throws IOException {
+    @Override
+    public List<Output> run() throws Exception {
         // Parse all .java files in input.getDirectory()
         Collection<File> javaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
         Collection<ClassBean> classBeans = new HashSet<>();
         for (File javaFile : javaFiles) {
             Path filePath = javaFile.toPath().toAbsolutePath();
-            CompilationUnit fileCU = new CodeParser().createParser(new String(Files.readAllBytes(filePath)));
-            if (fileCU.types().size() == 0) {
-                System.err.println("Could not parse file: " + filePath);
-            } else {
-                TypeDeclaration typeDeclaration = (TypeDeclaration) fileCU.types().get(0);
-                List<String> imports = new ArrayList<>();
-                for (Object anImport : fileCU.imports()) {
-                    imports.add(anImport.toString());
-                }
-                if (fileCU.getPackage() == null) {
-                    System.err.println("Could not parse file: " + filePath);
-                } else {
-                    ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage().getName().getFullyQualifiedName(), imports);
-                    classBean.setPathToFile(filePath.toAbsolutePath());
-                    classBeans.add(classBean);
-                }
-            }
+            ClassBean classBean = pathToBean(filePath);
+            classBeans.add(classBean);
         }
 
         List<Output> outputs = new ArrayList<>();
@@ -89,8 +76,11 @@ public class ComputeMetrics {
         for (ClassBean classBean : classBeans) {
             String classFQN = classBean.getBelongingPackage() + "." + classBean.getName();
             Map<String, Double> metrics = computeMetrics(classBean, classBeans);
-            Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
-            outputs.add(new Output(project, classFQN, input.getDirectory(), filePath.toString(), metrics));
+            //Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
+            Map<String, String> attributes = new HashMap<>();
+            attributes.put("project", project);
+            attributes.put("class", classFQN);
+            outputs.add(new Output(attributes, metrics));
         }
         return outputs;
     }

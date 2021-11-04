@@ -1,22 +1,10 @@
 package org.computemetrics.core;
 
-public class Input {
-    private final String directory;
-    private final String file;
+public abstract class Input {
     private final String[] metrics;
 
-    public Input(String directory, String file, String[] metrics) {
-        this.directory = directory;
-        this.file = file;
+    public Input(String[] metrics) {
         this.metrics = metrics;
-    }
-
-    public String getDirectory() {
-        return directory;
-    }
-
-    public String getFile() {
-        return file;
     }
 
     public String[] getMetrics() {

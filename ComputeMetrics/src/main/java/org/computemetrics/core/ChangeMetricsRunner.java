@@ -1,5 +1,6 @@
 package org.computemetrics.core;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.computemetrics.beans.ClassBean;
 
 import java.nio.file.Paths;
@@ -56,8 +57,9 @@ public class ChangeMetricsRunner extends MetricsRunner {
                     break;
                  */
                 case COND:
-                    metrics.put(ADDED_COND, (double) ChangeMetrics.computeAddedConditions(beforeClassBean, afterClassBean));
-                    metrics.put(REMOVED_COND, (double) ChangeMetrics.computeRemovedConditions(beforeClassBean, afterClassBean));
+                    Pair<Integer, Integer> addedRemovedConditions = ChangeMetrics.computeAddedRemovedConditions(beforeClassBean, afterClassBean);
+                    metrics.put(ADDED_COND, (double) addedRemovedConditions.getLeft());
+                    metrics.put(REMOVED_COND, (double) addedRemovedConditions.getRight());
                     break;
                 case CALL:
                     metrics.put(ADDED_CALL, (double) ChangeMetrics.computeAddedCalls(beforeClassBean, afterClassBean));

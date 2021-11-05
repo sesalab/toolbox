@@ -43,6 +43,10 @@ public class ForBean extends NodeBean<ForStatement> {
         this.body = body;
     }
 
+    public boolean isInfiniteLoop() {
+        return expression == null || expression.equals("true");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

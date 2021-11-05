@@ -25,14 +25,18 @@ public class ChangeMetrics {
         List<SwitchCaseBean> afterSwitchCases = afterCB.getSwitchCases();
         Pair<Integer, Integer> addedRemovedSwitchCases = computeAddedRemovedNodes(beforeSwitchCases, afterSwitchCases);
 
-        // Whiles
+        // Whiles (no infinite loops)
         List<WhileBean> beforeWhiles = beforeCB.getWhiles();
         List<WhileBean> afterWhiles = afterCB.getWhiles();
+        beforeWhiles.removeIf(WhileBean::isInfiniteLoop);
+        afterWhiles.removeIf(WhileBean::isInfiniteLoop);
         Pair<Integer, Integer> addedRemovedWhiles = computeAddedRemovedNodes(beforeWhiles, afterWhiles);
 
-        // Fors
+        // Fors (no infinite loops)
         List<ForBean> beforeFors = beforeCB.getFors();
         List<ForBean> afterFors = afterCB.getFors();
+        beforeFors.removeIf(ForBean::isInfiniteLoop);
+        afterFors.removeIf(ForBean::isInfiniteLoop);
         Pair<Integer, Integer> addedRemovedFors = computeAddedRemovedNodes(beforeFors, afterFors);
 
         // Conditionals

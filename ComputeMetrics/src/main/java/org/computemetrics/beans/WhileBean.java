@@ -24,6 +24,10 @@ public class WhileBean extends NodeBean<WhileStatement> {
         this.body = body;
     }
 
+    public boolean isInfiniteLoop() {
+        return expression.equals("true");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

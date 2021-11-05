@@ -15,7 +15,8 @@ public class ForParser {
                 .map(Object::toString)
                 .collect(Collectors.toList())
         );
-        forBean.setExpression(forStatement.getExpression().toString());
+
+        forBean.setExpression(forStatement.getExpression() != null ? forStatement.getExpression().toString() : null);
         forBean.setUpdaters(((List<Expression>) forStatement.updaters()).stream()
                 .map(Object::toString)
                 .collect(Collectors.toList())

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ClassBean {
     private String name;
@@ -266,9 +267,15 @@ public class ClassBean {
         this.typeDeclaration = typeDeclaration;
     }
 
-    public boolean equals(Object arg) {
-        return this.getName().equals(((ClassBean) arg).getName()) &&
-                this.getBelongingPackage().equals(((ClassBean) arg).getBelongingPackage());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClassBean classBean = (ClassBean) o;
+        boolean nameEquality = Objects.equals(name, classBean.name);
+        if (belongingPackage != null && classBean.belongingPackage != null) {
+            return nameEquality && Objects.equals(belongingPackage, classBean.belongingPackage);
+        }
+        return nameEquality;
     }
-
 }

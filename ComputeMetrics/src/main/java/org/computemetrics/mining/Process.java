@@ -67,7 +67,7 @@ public class Process implements CommitVisitor {
                             PackageBean packageBean = new PackageBean();
                             packageBean.setName(parsed.getPackage().getName().getFullyQualifiedName());
 
-                            ClassBean classBean = ClassParser.parse(typeDeclaration, packageBean.getName(), imports);
+                            ClassBean classBean = ClassParser.parse(typeDeclaration, parsed.getPackage(), imports);
                             classBean.setPathToFile(file.getFile().toPath());
 
                             int loc = CKMetrics.getLOC(classBean);

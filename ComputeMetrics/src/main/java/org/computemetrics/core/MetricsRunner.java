@@ -16,22 +16,18 @@ public abstract class MetricsRunner {
     public abstract List<Output> run() throws Exception;
 
     protected ClassBean pathToBean(Path filePath) throws Exception {
-        CompilationUnit fileCU = new CodeParser().createParser(new String(Files.readAllBytes(filePath)));
+        CompilationUnit fileCU = new CodeParser().createParser(Files.readString(filePath));
         if (fileCU.types().size() == 0) {
-            throw new RuntimeException("Could not parse file: " + fileCU);
+            throw new RuntimeException("Could not parse file: " + filePath);
         } else {
             TypeDeclaration typeDeclaration = (TypeDeclaration) fileCU.types().get(0);
             List<String> imports = new ArrayList<>();
             for (Object anImport : fileCU.imports()) {
                 imports.add(anImport.toString());
             }
-            if (fileCU.getPackage() == null) {
-                throw new RuntimeException("Could not parse file: " + fileCU);
-            } else {
-                ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage().getName().getFullyQualifiedName(), imports);
-                classBean.setPathToFile(filePath.toAbsolutePath());
-                return classBean;
-            }
+            ClassBean classBean = ClassParser.parse(typeDeclaration, fileCU.getPackage(), imports);
+            classBean.setPathToFile(filePath.toAbsolutePath());
+            return classBean;
         }
     }
 }

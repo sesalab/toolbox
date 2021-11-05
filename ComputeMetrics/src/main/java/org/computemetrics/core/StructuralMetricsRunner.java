@@ -2,14 +2,8 @@ package org.computemetrics.core;
 
 import org.apache.commons.io.FileUtils;
 import org.computemetrics.beans.ClassBean;
-import org.computemetrics.parser.ClassParser;
-import org.computemetrics.parser.CodeParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -74,7 +68,7 @@ public class StructuralMetricsRunner extends MetricsRunner {
             classBeans.add(classBean);
         }
         for (ClassBean classBean : classBeans) {
-            String classFQN = classBean.getBelongingPackage() + "." + classBean.getName();
+            String classFQN = classBean.getBelongingPackage() != null ? classBean.getBelongingPackage() + "." + classBean.getName() : classBean.getName();
             Map<String, Double> metrics = computeMetrics(classBean, classBeans);
             //Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
             Map<String, String> attributes = new HashMap<>();

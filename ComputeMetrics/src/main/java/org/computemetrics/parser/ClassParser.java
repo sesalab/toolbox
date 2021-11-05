@@ -6,6 +6,7 @@ import org.computemetrics.beans.MethodBean;
 import org.computemetrics.parser.visitor.*;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.util.ArrayList;
@@ -16,11 +17,11 @@ import java.util.stream.Collectors;
 
 public class ClassParser {
 
-    public static ClassBean parse(TypeDeclaration typeDeclaration, String belongingPackage, List<String> imports) {
+    public static ClassBean parse(TypeDeclaration typeDeclaration, PackageDeclaration belongingPackage, List<String> imports) {
         ClassBean classBean = new ClassBean();
         classBean.setName(typeDeclaration.getName().toString());
         classBean.setImports(imports);
-        classBean.setBelongingPackage(belongingPackage);
+        classBean.setBelongingPackage(belongingPackage != null ? belongingPackage.getName().getFullyQualifiedName() : null);
         classBean.setTextContent(typeDeclaration.toString());
         if (typeDeclaration.getSuperclassType() != null)
             classBean.setSuperclass(typeDeclaration.getSuperclassType().toString());

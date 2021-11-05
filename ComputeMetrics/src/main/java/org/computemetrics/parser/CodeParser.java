@@ -43,7 +43,7 @@ public class CodeParser {
     }
 
     public CompilationUnit createParser(String pClass) {
-        parser = ASTParser.newParser(AST.JLS4);
+        parser = ASTParser.newParser(AST.JLS14);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         parser.setSource(pClass.toCharArray()); // set source
         parser.setResolveBindings(true); // we need bindings later on

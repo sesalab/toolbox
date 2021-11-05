@@ -22,15 +22,17 @@ public class ClassBean {
     private int entityClassUsage;
     private Map<String, Integer> operands;
     private Map<String, Integer> operators;
-    private List<AssertStatement> asserts;
-    private List<IfStatement> ifs;
-    private List<SwitchCase> switchCases;
-    private List<WhileStatement> whiles;
-    private List<ForStatement> fors;
-    private List<ConditionalExpression> conditionals;
-    private List<MethodInvocation> methodCalls;
-    private List<ConstructorInvocation> constructorCalls;
-    private List<Assignment> assignments;
+    private List<AssertBean> asserts;
+    private List<IfBean> ifs;
+    private List<SwitchCaseBean> switchCases;
+    private List<WhileBean> whiles;
+    private List<ForBean> fors;
+    private List<ConditionalBean> conditionals;
+    /*
+    private List<MethodCallBean> methodCalls;
+    private List<ConstructorCallBean> constructorCalls;
+    private List<AssignmentBean> assignments;
+     */
     private TypeDeclaration typeDeclaration;
 
     public int getLOC() {
@@ -178,77 +180,79 @@ public class ClassBean {
         return operators.keySet().size();
     }
 
-    public List<AssertStatement> getAsserts() {
+    public List<AssertBean> getAsserts() {
         return asserts;
     }
 
-    public void setAsserts(List<AssertStatement> asserts) {
+    public void setAsserts(List<AssertBean> asserts) {
         this.asserts = asserts;
     }
 
-    public List<IfStatement> getIfs() {
+    public List<IfBean> getIfs() {
         return ifs;
     }
 
-    public void setIfs(List<IfStatement> ifs) {
+    public void setIfs(List<IfBean> ifs) {
         this.ifs = ifs;
     }
 
-    public List<SwitchCase> getSwitchCases() {
+    public List<SwitchCaseBean> getSwitchCases() {
         return switchCases;
     }
 
-    public void setSwitchCases(List<SwitchCase> switchCases) {
+    public void setSwitchCases(List<SwitchCaseBean> switchCases) {
         this.switchCases = switchCases;
     }
 
-    public List<WhileStatement> getWhiles() {
+    public List<WhileBean> getWhiles() {
         return whiles;
     }
 
-    public void setWhiles(List<WhileStatement> whiles) {
+    public void setWhiles(List<WhileBean> whiles) {
         this.whiles = whiles;
     }
 
-    public List<ForStatement> getFors() {
+    public List<ForBean> getFors() {
         return fors;
     }
 
-    public void setFors(List<ForStatement> fors) {
+    public void setFors(List<ForBean> fors) {
         this.fors = fors;
     }
 
-    public List<ConditionalExpression> getConditionals() {
+    public List<ConditionalBean> getConditionals() {
         return conditionals;
     }
 
-    public void setConditionals(List<ConditionalExpression> conditionals) {
+    public void setConditionals(List<ConditionalBean> conditionals) {
         this.conditionals = conditionals;
     }
 
-    public List<MethodInvocation> getMethodCalls() {
+    /*
+    public List<MethodCallBean> getMethodCalls() {
         return methodCalls;
     }
 
-    public void setMethodCalls(List<MethodInvocation> methodCalls) {
+    public void setMethodCalls(List<MethodCallBean> methodCalls) {
         this.methodCalls = methodCalls;
     }
 
-    public List<ConstructorInvocation> getConstructorCalls() {
+    public List<ConstructorCallBean> getConstructorCalls() {
         return constructorCalls;
     }
 
-    public void setConstructorCalls(List<ConstructorInvocation> constructorCalls) {
+    public void setConstructorCalls(List<ConstructorCallBean> constructorCalls) {
         this.constructorCalls = constructorCalls;
     }
 
-    public List<Assignment> getAssignments() {
+    public List<AssignmentBean> getAssignments() {
         return assignments;
     }
 
-    public void setAssignments(List<Assignment> assignments) {
+    public void setAssignments(List<AssignmentBean> assignments) {
         this.assignments = assignments;
     }
+     */
 
     public TypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
@@ -259,12 +263,8 @@ public class ClassBean {
     }
 
     public boolean equals(Object arg) {
-        if (this.getName().equals(((ClassBean) arg).getName()) &&
-                this.getBelongingPackage().equals(((ClassBean) arg).getBelongingPackage())) {
-            return true;
-        }
-
-        return false;
+        return this.getName().equals(((ClassBean) arg).getName()) &&
+                this.getBelongingPackage().equals(((ClassBean) arg).getBelongingPackage());
     }
 
 }

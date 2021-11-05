@@ -4,7 +4,6 @@ import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
 import org.computemetrics.parser.visitor.*;
-import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -100,23 +99,43 @@ public class ClassParser {
         typeDeclaration.accept(whileVisitor);
         typeDeclaration.accept(forVisitor);
         typeDeclaration.accept(conditionalExpressionVisitor);
-        classBean.setAsserts(assertVisitor.getAsserts());
-        classBean.setIfs(ifVisitor.getIfs());
-        classBean.setSwitchCases(switchCaseVisitor.getCases());
-        classBean.setWhiles(whileVisitor.getWhiles());
-        classBean.setFors(forVisitor.getFors());
-        classBean.setConditionals(conditionalExpressionVisitor.getConditionals());
+        classBean.setAsserts(assertVisitor.getAsserts().stream()
+                .map(AssertParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setIfs(ifVisitor.getIfs().stream()
+                .map(IfParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setSwitchCases(switchCaseVisitor.getCases().stream()
+                .map(SwitchCaseParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setWhiles(whileVisitor.getWhiles().stream()
+                .map(WhileParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setFors(forVisitor.getFors().stream()
+                .map(ForParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setConditionals(conditionalExpressionVisitor.getConditionals().stream()
+                .map(ConditionalExpressionParser::parse)
+                .collect(Collectors.toList()));
 
+        /*
         MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
         ConstructorInvocationVisitor constructorInvocationVisitor = new ConstructorInvocationVisitor();
         typeDeclaration.accept(methodInvocationVisitor);
         typeDeclaration.accept(constructorInvocationVisitor);
-        classBean.setMethodCalls(methodInvocationVisitor.getCalls());
-        classBean.setConstructorCalls(constructorInvocationVisitor.getCalls());
+        classBean.setMethodCalls(methodInvocationVisitor.getCalls().stream()
+                .map(MethodCallParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setConstructorCalls(constructorInvocationVisitor.getCalls().stream()
+                .map(ConstructorCallParser::parse)
+                .collect(Collectors.toList()));
 
         AssignmentVisitor assignmentVisitor = new AssignmentVisitor();
         typeDeclaration.accept(assignmentVisitor);
-        classBean.setAssignments(assignmentVisitor.getAssignments());
+        classBean.setAssignments(assignmentVisitor.getAssignments().stream()
+                .map(AssignmentParser::parse)
+                .collect(Collectors.toList()));
+         */
 
         classBean.setTypeDeclaration(typeDeclaration);
         return classBean;

@@ -12,14 +12,10 @@ import java.util.Map;
 
 public class ChangeMetricsRunner extends MetricsRunner {
     private final ChangeInput input;
-    private static final String METH = "Meth";
     private static final String COND = "Cond";
     private static final String CALL = "Call";
     private static final String ASSIGN = "Assign";
 
-    private static final String ADDED_METH = "added_methods";
-    private static final String REMOVED_METH = "removed_methods";
-    private static final String CHANGED_METH = "changed_methods";
     private static final String ADDED_COND = "added_conditionals";
     private static final String REMOVED_COND = "removed_conditionals";
     private static final String ADDED_CALL = "added_calls";
@@ -49,25 +45,20 @@ public class ChangeMetricsRunner extends MetricsRunner {
         Map<String, Double> metrics = new LinkedHashMap<>();
         for (String metric : input.getMetrics()) {
             switch (metric) {
-                /*
-                case METH:
-                    metrics.put(ADDED_METH, (double) ChangeMetrics.computeAddedMethods(beforeClassBean, afterClassBean));
-                    metrics.put(REMOVED_METH, (double) ChangeMetrics.computeRemovedMethods(beforeClassBean, afterClassBean));
-                    metrics.put(CHANGED_METH, (double) ChangeMetrics.computeChangedMethods(beforeClassBean, afterClassBean));
-                    break;
-                 */
                 case COND:
                     Pair<Integer, Integer> addedRemovedConditions = ChangeMetrics.computeAddedRemovedConditions(beforeClassBean, afterClassBean);
                     metrics.put(ADDED_COND, (double) addedRemovedConditions.getLeft());
                     metrics.put(REMOVED_COND, (double) addedRemovedConditions.getRight());
                     break;
                 case CALL:
-                    metrics.put(ADDED_CALL, (double) ChangeMetrics.computeAddedCalls(beforeClassBean, afterClassBean));
-                    metrics.put(REMOVED_CALL, (double) ChangeMetrics.computeRemovedCalls(beforeClassBean, afterClassBean));
+                    Pair<Integer, Integer> addedRemovedCalls = ChangeMetrics.computeAddedRemovedCalls(beforeClassBean, afterClassBean);
+                    metrics.put(ADDED_CALL, (double) addedRemovedCalls.getLeft());
+                    metrics.put(REMOVED_CALL, (double) addedRemovedCalls.getRight());
                     break;
                 case ASSIGN:
-                    metrics.put(ADDED_ASSIGN, (double) ChangeMetrics.computeAddedAssignments(beforeClassBean, afterClassBean));
-                    metrics.put(REMOVED_ASSIGN, (double) ChangeMetrics.computeRemovedAssignments(beforeClassBean, afterClassBean));
+                    Pair<Integer, Integer> addedRemovedAssignments = ChangeMetrics.computeAddedRemovedAssignments(beforeClassBean, afterClassBean);
+                    metrics.put(ADDED_ASSIGN, (double) addedRemovedAssignments.getLeft());
+                    metrics.put(REMOVED_ASSIGN, (double) addedRemovedAssignments.getRight());
                     break;
             }
         }

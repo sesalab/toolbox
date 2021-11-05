@@ -40,13 +40,6 @@ public class ChangeMetrics {
         List<ConditionalBean> afterConditionals = afterCB.getConditionals();
         Pair<Integer, Integer> addedRemovedConditionals = computeAddedRemovedNodes(beforeConditionals, afterConditionals);
 
-        System.out.println(addedRemovedAsserts);
-        System.out.println(addedRemovedIfs);
-        System.out.println(addedRemovedSwitchCases);
-        System.out.println(addedRemovedWhiles);
-        System.out.println(addedRemovedFors);
-        System.out.println(addedRemovedConditionals);
-
         int addedConditions = addedRemovedAsserts.getLeft() + addedRemovedIfs.getLeft() + addedRemovedSwitchCases.getLeft() +
                 addedRemovedWhiles.getLeft() + addedRemovedFors.getLeft() + addedRemovedConditionals.getLeft();
         int removedConditions = addedRemovedAsserts.getRight() + addedRemovedIfs.getRight() + addedRemovedSwitchCases.getRight() +
@@ -54,24 +47,34 @@ public class ChangeMetrics {
         return new ImmutablePair<>(addedConditions, removedConditions);
     }
 
-    public static int computeAddedCalls(ClassBean beforeCB, ClassBean afterCB) {
-        // TODO Stub
-        return 0;
+    public static Pair<Integer, Integer> computeAddedRemovedCalls(ClassBean beforeCB, ClassBean afterCB) {
+        // Method Calls
+        List<MethodCallBean> beforeMethodCalls = beforeCB.getMethodCalls();
+        List<MethodCallBean> afterMethodCalls = afterCB.getMethodCalls();
+        Pair<Integer, Integer> addedRemovedCalls = computeAddedRemovedNodes(beforeMethodCalls, afterMethodCalls);
+
+        // This Constructor Calls
+        List<ThisConstructorCallBean> beforeThisConstructorCalls = beforeCB.getThisConstructorCalls();
+        List<ThisConstructorCallBean> afterThisConstructorCalls = afterCB.getThisConstructorCalls();
+        Pair<Integer, Integer> addedRemovedThisConstructorCalls = computeAddedRemovedNodes(beforeThisConstructorCalls, afterThisConstructorCalls);
+
+        // Super Constructor Calls
+        List<SuperConstructorCallBean> beforeSuperConstructorCalls = beforeCB.getSuperConstructorCalls();
+        List<SuperConstructorCallBean> afterSuperConstructorCalls = afterCB.getSuperConstructorCalls();
+        Pair<Integer, Integer> addedRemovedSuperConstructorCalls = computeAddedRemovedNodes(beforeSuperConstructorCalls, afterSuperConstructorCalls);
+
+        int addedCalls = addedRemovedCalls.getLeft() + addedRemovedThisConstructorCalls.getLeft() + addedRemovedSuperConstructorCalls.getLeft();
+        int removedCalls = addedRemovedCalls.getRight() + addedRemovedThisConstructorCalls.getRight() + addedRemovedSuperConstructorCalls.getRight();
+        return new ImmutablePair<>(addedCalls, removedCalls);
     }
 
-    public static int computeRemovedCalls(ClassBean beforeCB, ClassBean afterCB) {
-        // TODO Stub
-        return 0;
-    }
+    public static Pair<Integer, Integer> computeAddedRemovedAssignments(ClassBean beforeCB, ClassBean afterCB) {
+        // Super Constructor Calls
+        List<AssignmentBean> beforeAssignments = beforeCB.getAssignments();
+        List<AssignmentBean> afterAssignments = afterCB.getAssignments();
+        Pair<Integer, Integer> addedRemovedAssignments = computeAddedRemovedNodes(beforeAssignments, afterAssignments);
 
-    public static int computeAddedAssignments(ClassBean beforeCB, ClassBean afterCB) {
-        // TODO Stub
-        return 0;
-    }
-
-    public static int computeRemovedAssignments(ClassBean beforeCB, ClassBean afterCB) {
-        // TODO Stub
-        return 0;
+        return new ImmutablePair<>(addedRemovedAssignments.getLeft(), addedRemovedAssignments.getRight());
     }
 
     private static Pair<Integer, Integer> computeAddedRemovedNodes(List<? extends NodeBean<?>> beforeNodes, List<? extends NodeBean<?>> afterNodes) {

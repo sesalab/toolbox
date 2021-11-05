@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ClassBean {
-
     private String name;
     private Collection<InstanceVariableBean> instanceVariables;
     private Collection<MethodBean> methods;
@@ -28,11 +27,10 @@ public class ClassBean {
     private List<WhileBean> whiles;
     private List<ForBean> fors;
     private List<ConditionalBean> conditionals;
-    /*
     private List<MethodCallBean> methodCalls;
-    private List<ConstructorCallBean> constructorCalls;
+    private List<ThisConstructorCallBean> thisConstructorCalls;
+    private List<SuperConstructorCallBean> superConstructorCalls;
     private List<AssignmentBean> assignments;
-     */
     private TypeDeclaration typeDeclaration;
 
     public int getLOC() {
@@ -228,7 +226,6 @@ public class ClassBean {
         this.conditionals = conditionals;
     }
 
-    /*
     public List<MethodCallBean> getMethodCalls() {
         return methodCalls;
     }
@@ -237,12 +234,20 @@ public class ClassBean {
         this.methodCalls = methodCalls;
     }
 
-    public List<ConstructorCallBean> getConstructorCalls() {
-        return constructorCalls;
+    public List<ThisConstructorCallBean> getThisConstructorCalls() {
+        return thisConstructorCalls;
     }
 
-    public void setConstructorCalls(List<ConstructorCallBean> constructorCalls) {
-        this.constructorCalls = constructorCalls;
+    public void setThisConstructorCalls(List<ThisConstructorCallBean> thisConstructorCalls) {
+        this.thisConstructorCalls = thisConstructorCalls;
+    }
+
+    public List<SuperConstructorCallBean> getSuperConstructorCalls() {
+        return superConstructorCalls;
+    }
+
+    public void setSuperConstructorCalls(List<SuperConstructorCallBean> superConstructorCalls) {
+        this.superConstructorCalls = superConstructorCalls;
     }
 
     public List<AssignmentBean> getAssignments() {
@@ -252,7 +257,6 @@ public class ClassBean {
     public void setAssignments(List<AssignmentBean> assignments) {
         this.assignments = assignments;
     }
-     */
 
     public TypeDeclaration getTypeDeclaration() {
         return typeDeclaration;

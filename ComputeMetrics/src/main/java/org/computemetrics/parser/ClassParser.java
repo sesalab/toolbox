@@ -118,16 +118,20 @@ public class ClassParser {
                 .map(ConditionalExpressionParser::parse)
                 .collect(Collectors.toList()));
 
-        /*
         MethodInvocationVisitor methodInvocationVisitor = new MethodInvocationVisitor();
         ConstructorInvocationVisitor constructorInvocationVisitor = new ConstructorInvocationVisitor();
+        SuperConstructorInvocationVisitor superConstructorInvocationVisitor = new SuperConstructorInvocationVisitor();
         typeDeclaration.accept(methodInvocationVisitor);
         typeDeclaration.accept(constructorInvocationVisitor);
+        typeDeclaration.accept(superConstructorInvocationVisitor);
         classBean.setMethodCalls(methodInvocationVisitor.getCalls().stream()
                 .map(MethodCallParser::parse)
                 .collect(Collectors.toList()));
-        classBean.setConstructorCalls(constructorInvocationVisitor.getCalls().stream()
-                .map(ConstructorCallParser::parse)
+        classBean.setThisConstructorCalls(constructorInvocationVisitor.getCalls().stream()
+                .map(ThisConstructorCallParser::parse)
+                .collect(Collectors.toList()));
+        classBean.setSuperConstructorCalls(superConstructorInvocationVisitor.getCalls().stream()
+                .map(SuperConstructorCallParser::parse)
                 .collect(Collectors.toList()));
 
         AssignmentVisitor assignmentVisitor = new AssignmentVisitor();
@@ -135,7 +139,6 @@ public class ClassParser {
         classBean.setAssignments(assignmentVisitor.getAssignments().stream()
                 .map(AssignmentParser::parse)
                 .collect(Collectors.toList()));
-         */
 
         classBean.setTypeDeclaration(typeDeclaration);
         return classBean;

@@ -62,7 +62,7 @@ public class StructuralMetricsRunner extends MetricsRunner {
                     .filter(cb -> cb.getPathToFile().equals(pathToDirectory.resolve(Paths.get(input.getFile()))))
                     .findFirst().orElse(null);
             if (classBean == null) {
-                throw new RuntimeException("Target file not found: aborting...");
+                throw new RuntimeException("Target file not found. Exiting.");
             }
             classBeans.clear();
             classBeans.add(classBean);

@@ -30,7 +30,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.computemetrics.cli.Runner</mainClass>
+                                    <mainClass>org.computemetrics.cli.CLIRunner</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

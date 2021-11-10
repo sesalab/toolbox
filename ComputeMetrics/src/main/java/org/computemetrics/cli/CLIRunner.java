@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Runner {
+public class CLIRunner {
 
     public static final String MODE_OPT = "mode";
     public static final String DIR_OPT = "dir";
@@ -63,7 +63,11 @@ public class Runner {
             }
             String dir = cl.getOptionValue(DIR_OPT);
             String file = cl.getOptionValue(FILE_OPT);
-            runner = new StructuralMetricsRunner(new StructuralInput(dir, file, metrics.split(",")));
+            try {
+                runner = new StructuralMetricsRunner(new StructuralInput(dir, file, metrics.split(",")));
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Exiting.", e);
+            }
         } else if (mode.equalsIgnoreCase(DIFF_MODE)) {
             if (!cl.hasOption(BEFORE_OPT) || !cl.hasOption(AFTER_OPT)) {
                 throw new ParseException("Files versions not specified: please, specify using -b and -a options. Exiting.");

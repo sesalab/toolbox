@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.computemetrics.beans.ClassBean;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -44,25 +45,29 @@ public class StructuralMetricsRunner extends MetricsRunner {
     }
 
     @Override
-    public List<Output> run() throws Exception {
+    public List<Output> run() {
         // Parse all .java files in input.getDirectory()
         Collection<File> javaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
         Collection<ClassBean> classBeans = new HashSet<>();
         for (File javaFile : javaFiles) {
             Path filePath = javaFile.toPath().toAbsolutePath();
-            ClassBean classBean = pathToBean(filePath);
-            classBeans.add(classBean);
+            try {
+                ClassBean classBean = pathToBean(filePath);
+                classBeans.add(classBean);
+            } catch (RuntimeException | IOException e) {
+                System.err.println(e.getMessage() + ". Skipping.");
+            }
         }
 
         List<Output> outputs = new ArrayList<>();
         Path pathToDirectory = Paths.get(input.getDirectory());
-        String project = pathToDirectory.getFileName().toString();
+        String directory = pathToDirectory.getFileName().toString();
         if (input.getFile() != null) {
             ClassBean classBean = classBeans.stream()
                     .filter(cb -> cb.getPathToFile().equals(pathToDirectory.resolve(Paths.get(input.getFile()))))
                     .findFirst().orElse(null);
             if (classBean == null) {
-                throw new RuntimeException("Target file not found. Exiting.");
+                throw new RuntimeException(String.format("Target file %s could not be parsed.", input.getFile()));
             }
             classBeans.clear();
             classBeans.add(classBean);
@@ -72,7 +77,7 @@ public class StructuralMetricsRunner extends MetricsRunner {
             Map<String, Double> metrics = computeMetrics(classBean, classBeans);
             //Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
             Map<String, String> attributes = new HashMap<>();
-            attributes.put("project", project);
+            attributes.put("directory", directory);
             attributes.put("class", classFQN);
             outputs.add(new Output(attributes, metrics));
         }

@@ -1,6 +1,7 @@
-package org.computemetrics.core;
+package org.computemetrics.core.runner;
 
 import org.computemetrics.beans.ClassBean;
+import org.computemetrics.core.Output;
 import org.computemetrics.parser.ClassParser;
 import org.computemetrics.parser.CodeParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;

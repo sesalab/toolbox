@@ -1,4 +1,4 @@
-package org.computemetrics.core;
+package org.computemetrics.core.metrics;
 
 import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;

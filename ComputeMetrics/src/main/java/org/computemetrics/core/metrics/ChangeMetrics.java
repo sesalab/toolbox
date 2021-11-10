@@ -1,4 +1,4 @@
-package org.computemetrics.core;
+package org.computemetrics.core.metrics;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;

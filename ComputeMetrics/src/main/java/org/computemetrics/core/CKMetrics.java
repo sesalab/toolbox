@@ -4,6 +4,7 @@ import org.computemetrics.beans.ClassBean;
 import org.computemetrics.beans.InstanceVariableBean;
 import org.computemetrics.beans.MethodBean;
 import org.computemetrics.beans.PackageBean;
+import org.computemetrics.core.FileUtility;
 
 import java.io.IOException;
 import java.util.Collection;

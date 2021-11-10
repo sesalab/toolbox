@@ -1,4 +1,6 @@
-package org.computemetrics.core;
+package org.computemetrics.core.input;
+
+import org.computemetrics.core.Input;
 
 public class ChangeInput extends Input {
     private final String beforeFile;

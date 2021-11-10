@@ -1,7 +1,10 @@
-package org.computemetrics.core;
+package org.computemetrics.core.runner;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.computemetrics.beans.ClassBean;
+import org.computemetrics.core.metrics.ChangeMetrics;
+import org.computemetrics.core.Output;
+import org.computemetrics.core.input.ChangeInput;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;

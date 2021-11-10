@@ -1,7 +1,10 @@
-package org.computemetrics.core;
+package org.computemetrics.core.runner;
 
 import org.apache.commons.io.FileUtils;
 import org.computemetrics.beans.ClassBean;
+import org.computemetrics.core.Output;
+import org.computemetrics.core.input.FilesInput;
+import org.computemetrics.core.metrics.ClassMetrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class StructuralMetricsRunner extends MetricsRunner {
-    private final StructuralInput input;
+    private final FilesInput input;
     private static final String LOC = "LOC";
     private static final String SLOC = "SLOC";
     private static final String NOA = "NOA";
@@ -40,45 +43,46 @@ public class StructuralMetricsRunner extends MetricsRunner {
     private static final String TCC = "TCC";
     private static final String LCC = "LCC";
 
-    public StructuralMetricsRunner(StructuralInput input) {
+    public StructuralMetricsRunner(FilesInput input) {
         this.input = input;
     }
 
     @Override
     public List<Output> run() {
-        // Parse all .java files in input.getDirectory()
-        Collection<File> javaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
-        Collection<ClassBean> classBeans = new HashSet<>();
-        for (File javaFile : javaFiles) {
-            Path filePath = javaFile.toPath().toAbsolutePath();
+        // Parse ALL possible .java files in base directory
+        Collection<File> allJavaFiles = FileUtils.listFiles(new File(input.getDirectory()), new String[]{"java"}, true);
+        Collection<ClassBean> allClasses = new HashSet<>();
+        for (File javaFile : allJavaFiles) {
             try {
-                ClassBean classBean = pathToBean(filePath);
-                classBeans.add(classBean);
+                allClasses.add(pathToBean(javaFile.toPath().toAbsolutePath()));
             } catch (RuntimeException | IOException e) {
-                System.err.println(e.getMessage() + ". Skipping.");
+                System.err.println(e.getMessage() + ". Ignoring.");
             }
         }
+        System.out.printf("Parsed %d classes%n", allClasses.size());
+
+        List<String> filesToAnalyze = input.getFiles();
+        Collection<ClassBean> classesToAnalyze = new HashSet<>();
+        for (String file : filesToAnalyze) {
+            ClassBean clazz = allClasses.stream()
+                    .filter(cb -> cb.getPathToFile().equals(Paths.get(input.getDirectory(), file)))
+                    .findFirst().orElse(null);
+            if (clazz == null) {
+                System.err.println(String.format("Target file %s could not be parsed.", file) + " Ignoring.");
+            } else {
+                classesToAnalyze.add(clazz);
+            }
+        }
+        System.out.printf("Found %d classes to analyze%n", classesToAnalyze.size());
 
         List<Output> outputs = new ArrayList<>();
-        Path pathToDirectory = Paths.get(input.getDirectory());
-        String directory = pathToDirectory.getFileName().toString();
-        if (input.getFile() != null) {
-            ClassBean classBean = classBeans.stream()
-                    .filter(cb -> cb.getPathToFile().equals(pathToDirectory.resolve(Paths.get(input.getFile()))))
-                    .findFirst().orElse(null);
-            if (classBean == null) {
-                throw new RuntimeException(String.format("Target file %s could not be parsed.", input.getFile()));
-            }
-            classBeans.clear();
-            classBeans.add(classBean);
-        }
-        for (ClassBean classBean : classBeans) {
-            String classFQN = classBean.getBelongingPackage() != null ? classBean.getBelongingPackage() + "." + classBean.getName() : classBean.getName();
-            Map<String, Double> metrics = computeMetrics(classBean, classBeans);
+        for (ClassBean clazz : classesToAnalyze) {
+            Map<String, Double> metrics = computeMetrics(clazz, allClasses);
             //Path filePath = Paths.get(input.getDirectory()).relativize(classBean.getPathToFile());
             Map<String, String> attributes = new HashMap<>();
-            attributes.put("directory", directory);
-            attributes.put("class", classFQN);
+            attributes.put("directory", input.getDirectory());
+            attributes.put("filepath", clazz.getPathToFile().toString());
+            attributes.put("class", clazz.getBelongingPackage() != null ? clazz.getBelongingPackage() + "." + clazz.getName() : clazz.getName());
             outputs.add(new Output(attributes, metrics));
         }
         return outputs;

@@ -223,12 +223,17 @@ public class ClassMetrics {
      * @return
      */
     public static int getDIT(ClassBean cb, Collection<ClassBean> classes) {
-        ClassBean superClass = getSuperclassBean(cb, classes);
+        return visitInheritanceTree(cb, classes);
+    }
+
+    // Count until a cyclic inheritance
+    private static int visitInheritanceTree(ClassBean cb, Collection<ClassBean> unvisitedClasses) {
+        ClassBean superClass = getSuperclassBean(cb, unvisitedClasses);
         if (superClass == null) {
             return 1;
         }
-        int superDit = getDIT(superClass, classes);
-        return superDit + 1;
+        unvisitedClasses.remove(superClass);
+        return visitInheritanceTree(superClass, unvisitedClasses) + 1;
     }
 
     /**

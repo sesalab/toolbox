@@ -24,12 +24,13 @@ public class EightQueensRunner {
         final double mutationProbability = 1;
         final int maxIterations = 1000;
         final int maxIterationsNoImprovements = 0;
+        final Random random = new Random();
 
         ConflictsFunction fitnessFunction = new ConflictsFunction();
         FixedSizeChessboardRandomInitializer initializer = new FixedSizeChessboardRandomInitializer(numberOfIndividuals, chessSize);
         RouletteWheelSelection<ChessboardIndividual> selectionOperator = new RouletteWheelSelection<>(new Random());
         ChessboardSinglePointCrossover crossoverOperator = new ChessboardSinglePointCrossover();
-        ChessboardSinglePointMutation mutationOperator = new ChessboardSinglePointMutation();
+        ChessboardSinglePointMutation mutationOperator = new ChessboardSinglePointMutation(mutationProbability, random);
 
         //Get Multiple Stopping conditions
         MultipleStoppingCondition multipleStoppingConditions = getMultipleStoppingCondition(maxIterationsNoImprovements, maxIterations);
@@ -40,8 +41,8 @@ public class EightQueensRunner {
         GAResults<ChessboardIndividual> GAResults = geneticAlgorithm.run();
         ChessboardIndividual bestIndividual = GAResults.getBestIndividual();
         GAResults.getLog().forEach(System.out::println);
-        System.out.printf("Search terminated in %d/%d iterations.%n", GAResults.getNumberOfIterations(), geneticAlgorithm.getMaxIterations());
-        System.out.printf("Best individual is %s, with fitness %.2f.%n", Arrays.toString(bestIndividual.getCoding()), bestIndividual.getFitness());
+        System.out.printf("Search terminated in %d/%d iterations.%n", GAResults.getNumberOfIterations(),maxIterations);
+        System.out.printf("Best individual is %s, with fitness %.2f.%n", Arrays.toString(bestIndividual.getEncoding()), bestIndividual.getFitness());
     }
 
 

@@ -1,8 +1,6 @@
 package it.unisa.ga.fitness;
 
-import it.unisa.ga.individual.ChessboardIndividual;
-
-public class ConflictsFunction extends FitnessFunction<ChessboardIndividual> {
+public class ConflictsFunction<ChessboardIndividual extends it.unisa.ga.individual.ChessboardIndividual> extends FitnessFunction<ChessboardIndividual> {
 
     public ConflictsFunction() {
         super(false);
@@ -10,7 +8,7 @@ public class ConflictsFunction extends FitnessFunction<ChessboardIndividual> {
 
     @Override
     public void evaluate(ChessboardIndividual individual) {
-        int conflicts = getConflicts(individual.getCoding());
+        int conflicts = getConflicts(individual.getEncoding());
         individual.setFitness(conflicts);
     }
 

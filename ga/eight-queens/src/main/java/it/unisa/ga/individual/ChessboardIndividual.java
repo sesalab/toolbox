@@ -23,7 +23,7 @@ public class ChessboardIndividual extends IntArrayIndividual {
                 newCoding[i] = maxRows - 1;
             }
         }
-        setCoding(newCoding);
+        setEncoding(newCoding);
     }
 
     public int getCols() {

@@ -26,11 +26,11 @@ public class EightQueensRunner {
         final int maxIterationsNoImprovements = 0;
         final Random random = new Random();
 
-        ConflictsFunction fitnessFunction = new ConflictsFunction();
+        ConflictsFunction<ChessboardIndividual> fitnessFunction = new ConflictsFunction<>();
         FixedSizeChessboardRandomInitializer initializer = new FixedSizeChessboardRandomInitializer(numberOfIndividuals, chessSize);
         RouletteWheelSelection<ChessboardIndividual> selectionOperator = new RouletteWheelSelection<>(new Random());
         ChessboardSinglePointCrossover crossoverOperator = new ChessboardSinglePointCrossover();
-        ChessboardSinglePointMutation mutationOperator = new ChessboardSinglePointMutation(mutationProbability, random);
+        ChessboardSinglePointMutation<ChessboardIndividual> mutationOperator = new ChessboardSinglePointMutation<>(mutationProbability, random);
 
         //Get Multiple Stopping conditions
         MultipleStoppingCondition multipleStoppingConditions = getMultipleStoppingCondition(maxIterationsNoImprovements, maxIterations);

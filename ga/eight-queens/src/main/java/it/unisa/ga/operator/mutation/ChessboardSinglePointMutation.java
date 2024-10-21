@@ -1,8 +1,6 @@
 package it.unisa.ga.operator.mutation;
 
 import it.unisa.ga.individual.ChessboardIndividual;
-import it.unisa.ga.individual.Individual;
-
 import java.util.Random;
 
 public class ChessboardSinglePointMutation<T extends it.unisa.ga.individual.ChessboardIndividual> extends MutationOperator<ChessboardIndividual>{

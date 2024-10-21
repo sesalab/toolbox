@@ -5,12 +5,13 @@ import it.unisa.ga.individual.Individual;
 
 import java.util.Random;
 
-public class ChessboardSinglePointMutation extends RandomResettingMutation<ChessboardIndividual> {
+public class ChessboardSinglePointMutation<T extends it.unisa.ga.individual.ChessboardIndividual> extends MutationOperator<ChessboardIndividual>{
 
     public ChessboardSinglePointMutation(double mutationProbability, Random random) {
         super(mutationProbability, random);
     }
 
+    @Override
     protected ChessboardIndividual mutate(ChessboardIndividual individual) throws CloneNotSupportedException {
         Random rand = new Random();
         int[] coding = individual.getEncoding();
@@ -20,10 +21,5 @@ public class ChessboardSinglePointMutation extends RandomResettingMutation<Chess
         ChessboardIndividual mutatedIndividual = (ChessboardIndividual) individual.clone();
         mutatedIndividual.setEncoding(coding);
         return mutatedIndividual;
-    }
-
-    @Override
-    protected Individual mutate(Individual individual) throws CloneNotSupportedException {
-        return mutate((ChessboardIndividual) individual);
     }
 }
